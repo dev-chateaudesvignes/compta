@@ -1,3 +1,28 @@
-suivi_heures_airtable.md
+# Docs locales (non versionnées)
+/doc/
 CLAUDE.md
-Airtable.odt
+
+# Secrets
+.env
+.env*.local
+
+# Dépendances / build Next.js
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# Vercel
+.vercel
+
+# Divers
+.DS_Store
+npm-debug.log*
+
+# Exemple de variables d'env (sans valeurs réelles) : versionné
+!.env.example
+
+# Divers (Next.js)
+*.pem
+/coverage
