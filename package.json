@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "airtable:champs": "node --env-file=.env.local src/scripts/generer-champs.mts"
   },
   "dependencies": {
     "jose": "6.2.15",
