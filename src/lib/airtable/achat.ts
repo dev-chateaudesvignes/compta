@@ -3,6 +3,7 @@ import { definirEcriture } from "./ecriture";
 import { definirLecture, type ValeurDe } from "./lecture";
 import {
   calcul,
+  choixAEcrire,
   choixParmi,
   choixRequis,
   dateAEcrire,
@@ -57,7 +58,7 @@ export const ecritureAchat = definirEcriture("achat", {
   libelle: texteRequis,
   date: dateAEcrire,
   campagne: lienAEcrire,
-  section: choixParmi(SECTIONS),
+  section: choixAEcrire(SECTIONS),
   categorie: choixRequis,
   montantHt: montant.refine((v) => v !== 0, "le montant ne peut pas être nul"),
   produit: lienAEcrire.optional(),

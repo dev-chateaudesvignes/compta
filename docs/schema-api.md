@@ -9,9 +9,11 @@ Seuls les champs listés ici sont lus/écrits par l'app. Tout autre champ est ig
 - Appeler l'API avec returnFieldsByFieldId=true et ne demander que les champs ci-dessous (fields[]=fld…). Les IDs de champs et de tables ne changent pas quand un champ ou une table est renommé → toujours coder par ID.
 - Cellule vide = clé absente dans la réponse JSON → tout champ non obligatoire est optional() dans Zod.
 - Liens (multipleRecordLinks) = tableau d'IDs, même pour un lien « unique » → valider array().min(1) puis prendre [0].
-- Lookups (multipleLookupValues) = tableau de valeurs → éviter ; préférer relire la table liée.
+- On préfère un calcul, un rollup ou un lookup Airtable à du code dans l'app (y compris une jointure simple). Un lookup listé ici est donc autorisé.
+- Lookups (multipleLookupValues) = tableau de valeurs, même pour une seule → brique `lookupNombre` / `lookupTexte` / `lookupChoixParmi` (0 ou 1 valeur ; plusieurs → « à vérifier »).
 - Formules / rollups : peuvent renvoyer { "specialValue": "NaN" } ou { "error": "#ERROR!" } → schéma number().or(objet erreur) puis convertir en null.
-- Single select = nom de l'option (string). Valider contre l'enum attendue, catch → valeur par défaut / « inconnu ».
+- Single select = nom de l'option (string). Lecture : la valeur brute est gardée. Une valeur hors de la liste attendue (brique `choixParmi`) est **signalée** : la ligne reste comptée, elle est listée sur la page de contrôle, et les totaux qui la contiennent indiquent qu'ils contiennent des lignes à vérifier. Rien de visible sur les écrans de saisie. Pas de valeur de repli « inconnu ».
+- Écriture : un single select n'accepte que les valeurs de la liste (schéma strict).
 - Monnaie / nombre = number. Dates = "YYYY-MM-DD".
 - Rollups de la Synthèse : arrondir côté app (flottants type 7e-15).
 
@@ -44,6 +46,9 @@ Conséquences pour l'app :
 | Date de fin | `fld6mcpqjeFiH5Kyz` | date | ✔ |
 | Status | `fldyzICmt6jreGSVM` | select | ✔ |
 | Année de récolte | `fldF48eGyOQCZKZtC` | formule nombre | ✔ |
+| Hors culture (€) | `fldsXsLjFyV6rTlUX` | rollup (Achat → Hors culture (€), SUM) | — (ajouté le 24/11) ; charges niveau exploitation (ex. bonus TSA) |
+| Résultat cultures (€) | `fldYowSXtxHjzyxCz` | rollup (Synthèse → Résultat (€), SUM) | — (ajouté le 24/11) |
+| Résultat exploitation (€) | `fldb5fssfrKmWY9Ud` | formule : Résultat cultures (€) − Hors culture (€) | — (ajouté le 24/11) ; chiffre mis en avant sur l'écran Résultat, lu tel quel (aucun calcul dans l'app) |
 
 Campagne = 01/07 → 30/06.
 
@@ -115,6 +120,7 @@ Stock à une date donnée (historique) : pas stocké.
 | Reste à répartir (€) | `fldCrg2sWVyYwW2Hg` | formule | — (≠ 0 = facture pas encore entièrement utilisée / répartie) |
 | Quantité utilisée | `fldxNDOWa8OQUtgYZ` | rollup (Travaux → Quantité, SUM) | — (ajouté le 24/11) |
 | Quantité restante | `fldWK1y9fYzP18gGy` | formule | — (ajouté le 24/11) ; vide si pas de quantité |
+| Statut campagne | `flddwBKrUOuRVRdt8` | lookup Campagne → Status | — (ajouté le 24/11) ; sert aux rollups Produit « campagne en cours » |
 
 Reste à répartir (€) = Montant HT − Total ventilé − Hors culture − Stock fin de campagne.
 
@@ -130,9 +136,11 @@ Une ligne = une utilisation / affectation de tout ou partie d'une facture (Achat
 | Achat | `fldORrZiTuyagqCPF` | lien | ✔ |
 | Culture × récolte | `fldlyFNtRgcIIHNpy` | lien → Synthèse | ✔ (écrit par l'app, pas d'automation) |
 | Montant (€) | `fld7oXjUGnMbpYKVi` | currency | ✔ — source des rollups Synthèse / Achat |
-| Mode | `fldRKc1yGu6yHzH1k` | select : Montant saisi / Prorata surfaces | ✔ |
+| Mode | `fldRKc1yGu6yHzH1k` | select : Montant saisi / Prorata surfaces | ✔ à la saisie (vide sur 141 lignes importées 24/25 : tolérer) |
 | Date | `fldtPQ0dcmk9bWwng` | date | non (vide sur les 455 lignes importées 24/25) |
 | Quantité | `fldcKHq8ZJBucLEyg` | number (2 déc.) | non |
+| Catégorie | `fldhIlMhVvqjZCa2t` | lookup Achat → Catégorie | — (famille : tableaux « par famille ») |
+| Section | `fldUkMiKG4GKTjYkm` | lookup Achat → Section | — (Intrants / Report stock N-1 / Travaux agricoles / Charges diverses) |
 | Unité | `fldEETC19QtLRgdAd` | lookup Achat → Unité | — |
 | Prix unitaire (€) | `fldGKjDIH2rm6tjh3` | lookup Achat → Prix unitaire | — (affiché à 0 décimale, valeur stockée exacte) |
 
@@ -150,6 +158,10 @@ Règles serveur :
 | Unité | `fldjdo0wsdvKeMhxS` | select : kg / t / l / dose / u | ✔ |
 | Dernier prix unitaire (€) | `fldsr18E1Hy2xUV5Q` | lookup (tableau, 0 ou 1 valeur) | — |
 | Nb achats | `fldUnUjfX1Q9yQteW` | count | — |
+| Total acheté campagne en cours (€) | `fldofrDSMr95tC9jb` | rollup (Achat → Montant HT, SUM) | — (ajouté le 24/11) ; seulement Section ≠ Report stock N-1 et Statut campagne = En cours |
+| Quantité achetée campagne en cours | `fldfzRKDT6n2PXgMB` | rollup (Achat → Quantité, SUM) | — (ajouté le 24/11) ; mêmes conditions |
+
+Ces deux rollups valent 0 pour un produit sans achat sur la campagne « En cours » (ex. en travaillant sur 24/25, « Terminé »). Si deux campagnes sont « En cours », les deux sont additionnées.
 
 ### Livraison `tblKl6amijKZRglvV`
 
@@ -160,7 +172,7 @@ Règles serveur :
 | Campagne | `fldofwlTydD1BcP2T` | lien | ✔ |
 | Synthèse | `fld3cDLSgNLkLFQkv` | lien | rempli par automation (ne pas écrire) |
 | Date de livraison | `fldv7sAimW2XGyNiO` | date | ✔ |
-| Poids net | `fldmbR5bJCu2OeUPQ` | number (kg) | ✔ |
+| Poids net | `fldmbR5bJCu2OeUPQ` | number (kg) | ✔ (base de Synthèse.Livraison en T ; Tonnage n'est pas utilisé) |
 | Tonnage, H2O, PS, Calibre, Impureté, Proteine, … | (voir base) | number | non |
 | Champ / Assolement | `fld6EiQHRQII21x1C` / `fld7VnjSuluC77ICK` | lien | non |
 
@@ -197,20 +209,20 @@ Lecture seule pour l'instant. Champs : voir base.
 - Aucun lien obligatoire vide dans Travaux, Vente, Livraison, Assolement 24/25.
 - Achat : 6 lignes sans date (dont broyage de cailloux, assurance grêle, moissonnages, un bail) — ID Achat affiche « … – sans date ».
 - Autres recettes : 8/10 sans date.
+- Travaux : 455 lignes importées sans date ni quantité ; Mode vide sur 141 d'entre elles (toléré à la lecture, obligatoire à la saisie).
 - Synthèse maïs 2025 : pas de livraison → rendement vide, stock −45,763 t.
 - Formules corrigées le 19/11 pour ne plus renvoyer d'erreur : ID Achat, Prix moyen de vente en €/T (NaN jachère), Stock, Rendement, Valeur.
-- Valeur de contrôle : résultat total 24/25 (après bonus TSA) = 8 204,00 € (ventes au prix des contrats).
+- Valeur de contrôle : Campagnes.Résultat exploitation (€) 24/25 = **8 204,01 €** (ventes au prix des contrats, après bonus TSA). L'ancienne référence 8 204,00 € avait 1 centime d'écart dû aux arrondis par culture.
 
 ## Champs / objets legacy (ignorés par l'app, à supprimer à la main quand possible)
 
-Tous les champs préfixés OBSOLÈTE –, plus :
+Tri fait le 24/11/2026. Restent dans la base :
 
-- Achat : Famille (lookup cassé), new type achat, Montant TTC, Achat 2.
-- Cultures : Dernière date de vente, Dernière vente, Avant dernière vente, Performance Cultures Campagnes, Synthèse copy.
-- Campagnes : Surface totale exploitée, Surface Totale <culture>, Stock <culture>, Livraison <culture>, Vente <culture>, Vente Mais, Performance Cultures Campagnes, Synthèse copy (colonnes codées en dur par culture, ne gèrent pas les nouvelles cultures ; surfaces cadastrales, pas PAC).
-- Synthèse : Cumul surface en Ha (cadastrale ≠ PAC), Dernière date de vente, Dernière vente, Avant dernière vente.
-- Vente : Cumul des ventes prev, Cumul des ventes en quantité, Livraison à date, Stock à date (faux), date dernière vente, Numéro avant dernière vente, Vente <culture>, Update figures, is last sale ?, Is prev sale ?, Synthèse copy, lien Livraison (vide).
-- Livraison : Tonnage <culture>, update, Synthèse copy, Created time.
-- Assolement : Update, Synthèse copy. Champs : Livraison_test, Field 20, Field 22.
+- Cultures : Dernière vente.
+- Campagnes : Livraison <culture>, Vente <culture>, Vente Mais (colonnes codées en dur par culture, ne gèrent pas les nouvelles cultures).
+- Synthèse : Dernière date de vente, Dernière vente, Avant dernière vente.
+- Livraison : Tonnage <culture>, Tonnage sec corrigé.
+- Vente : Cumul des ventes prev, Cumul des ventes en quantité, Livraison à date, date dernière vente, Numéro avant dernière vente, Vente <culture>, is last sale ?.
+- Achat : Montant TTC.
 - Formulaire Form new livraison : remplacé par l'app → à supprimer.
 - Automations : seules restent les 3 « lien … synthèse » (voir plus haut).

@@ -3,20 +3,7 @@
 // Seul fichier du projet qui contient des IDs Airtable (tbl…, fld…).
 //
 // Champs volontairement absents (morts, ou écrits en dur pour chaque culture) :
-//   - Cultures.Synthèse copy
-//   - Campagnes.Surface Totale Blé
-//   - Campagnes.Surface Totale Orge Hiver
-//   - Campagnes.Surface totale Colza
-//   - Campagnes.Surface Totale Mais
-//   - Campagnes.Surface Totale Tournesol
-//   - Campagnes.Surface totale Jachère
 //   - Campagnes.Vente Mais
-//   - Campagnes.Stock Ble
-//   - Campagnes.Stock Tournesol
-//   - Campagnes.Stock Colza
-//   - Campagnes.Stock Orge Hiver
-//   - Campagnes.Stock Orge Printemps
-//   - Campagnes.Stock Mais
 //   - Campagnes.Livraison Ble
 //   - Campagnes.Livraison Colza
 //   - Campagnes.Livraison Orge Hiver
@@ -28,26 +15,18 @@
 //   - Campagnes.Vente Orge Hiver
 //   - Campagnes.Vente Orge Printemps
 //   - Campagnes.Vente Tournesol
-//   - Campagnes.Synthèse copy
-//   - Champs.Livraison_test
-//   - Assolement.Synthèse copy
 //   - Livraison.Tonnage Ble
 //   - Livraison.Tonnage Tournesol
 //   - Livraison.Tonnage Colza
 //   - Livraison.Tonnage Orge Hiver
 //   - Livraison.Tonnage Orge Printemps
 //   - Livraison.Tonnage Mais
-//   - Livraison.Tonnage Luzerne
-//   - Livraison.Synthèse copy
 //   - Vente.Vente Ble
 //   - Vente.Vente Tournesol
 //   - Vente.Vente Mais
 //   - Vente.Vente Orge Hiver
 //   - Vente.Vente Orge Printemps
 //   - Vente.Vente Colza
-//   - Vente.Vente Luzerne
-//   - Vente.Synthèse copy
-//   - Achat.new type achat
 
 export const tables = {
   parcellaire: {
@@ -74,11 +53,8 @@ export const tables = {
       assolement: { id: "fldswnZ1iYTSaPoNa", nom: "Assolement", type: "multipleRecordLinks" },
       livraison: { id: "fldvaE60lt4xeiLdP", nom: "Livraison", type: "multipleRecordLinks" },
       vente: { id: "fldFuUywbfomdftTB", nom: "Vente", type: "multipleRecordLinks" },
-      derniereDateDeVente: { id: "fldfQn9WGmsSs3LSf", nom: "Dernière date de vente", type: "rollup" },
       derniereVente: { id: "fldQ6G9UX6vmEZtRv", nom: "Dernière vente", type: "multipleLookupValues" },
-      avantDerniereVente: { id: "fldCVc3vcrebU9P2X", nom: "Avant dernière vente", type: "formula" },
       synthese: { id: "fldlI8SSNaLTJtOXC", nom: "Synthèse", type: "multipleRecordLinks" },
-      performanceCulturesCampagnes: { id: "fldCYOVAOQfIYc12Z", nom: "Performance Cultures Campagnes", type: "singleLineText" },
     },
   },
   campagnes: {
@@ -94,10 +70,11 @@ export const tables = {
       vente: { id: "flddhbk6gyKSu02Pv", nom: "Vente", type: "multipleRecordLinks" },
       livraison: { id: "fldby6BcF1a43ecUc", nom: "Livraison", type: "multipleRecordLinks" },
       synthese: { id: "fldKx7bL9KgNcOyRR", nom: "Synthèse", type: "multipleRecordLinks" },
-      surfaceTotaleExploitee: { id: "fldLJYpKfygzCH7AC", nom: "Surface totale exploitée", type: "rollup" },
-      performanceCulturesCampagnes: { id: "fldzz43CBH5W33hYa", nom: "Performance Cultures Campagnes", type: "singleLineText" },
       achat: { id: "flds5OX9lSiJLk2ZA", nom: "Achat", type: "multipleRecordLinks" },
       autresRecettes: { id: "fld1dq2gv29OcyOis", nom: "Autres recettes", type: "multipleRecordLinks" },
+      horsCultureEuros: { id: "fldsXsLjFyV6rTlUX", nom: "Hors culture (€)", type: "rollup" },
+      resultatCulturesEuros: { id: "fldYowSXtxHjzyxCz", nom: "Résultat cultures (€)", type: "rollup" },
+      resultatExploitationEuros: { id: "fldb5fssfrKmWY9Ud", nom: "Résultat exploitation (€)", type: "formula" },
     },
   },
   synthese: {
@@ -115,7 +92,6 @@ export const tables = {
       cumulDesLivraison: { id: "fldtoG6FSwwqT36p0", nom: "Cumul des livraison", type: "rollup" },
       livraisonEnT: { id: "fldqol4POHF9d6tJ1", nom: "Livraison en T", type: "formula" },
       venteEnT: { id: "fldDYRBDIkl6064Zj", nom: "Vente en T", type: "rollup" },
-      cumulSurfaceEnHa: { id: "fldIWob0WUINqKtXk", nom: "Cumul surface en Ha", type: "rollup" },
       valeurContratsEuros: { id: "fldpmvywmtG3WxBvt", nom: "Valeur contrats (€)", type: "rollup" },
       rendementEnTHa: { id: "fld8gjkGcYNtS77pJ", nom: "Rendement en T/Ha", type: "formula" },
       prixMoyenDeVenteEnEurosT: { id: "fldDjuFeEN9gDmnym", nom: "Prix moyen de vente en €/T", type: "formula" },
@@ -167,7 +143,6 @@ export const tables = {
       tonnage: { id: "fldxXuSh2ECxLSK02", nom: "Tonnage", type: "rollup" },
       rendement: { id: "fldQxEGMgoXgNexcj", nom: "Rendement", type: "formula" },
       synthese: { id: "fldtSu1CB9DORDzZK", nom: "Synthèse", type: "multipleRecordLinks" },
-      update: { id: "fldoDXgkUgjaP3Iop", nom: "Update", type: "checkbox" },
       surfacePacHa: { id: "fldEer1RsLVaOKyUB", nom: "Surface PAC (ha)", type: "number" },
     },
   },
@@ -195,9 +170,7 @@ export const tables = {
       tonnageSecCorrige: { id: "fldqEjrS2ravWdnpN", nom: "Tonnage sec corrigé", type: "formula" },
       vente: { id: "fldB21kidBtTrzj2R", nom: "Vente", type: "multipleRecordLinks" },
       anneeDeRecolte: { id: "fldu4cOm3MpvQwRCj", nom: "Année de récolte", type: "multipleLookupValues" },
-      update: { id: "fldO5tTpEYCiui7Ge", nom: "update", type: "checkbox" },
       synthese: { id: "fld3cDLSgNLkLFQkv", nom: "Synthèse", type: "multipleRecordLinks" },
-      createdTime: { id: "fldE9mgQT8U4YX5L5", nom: "Created time", type: "createdTime" },
     },
   },
   vente: {
@@ -216,14 +189,11 @@ export const tables = {
       anneeDeRecolte: { id: "fldX6zm7Na8HLK7o2", nom: "Année de récolte", type: "multipleLookupValues" },
       livraison: { id: "fldk8EQINTzwnFCyi", nom: "Livraison", type: "multipleRecordLinks" },
       livraisonADate: { id: "fldz83qQ111tnBQSG", nom: "Livraison à date", type: "multipleLookupValues" },
-      stockADate: { id: "fldHaFwWOrsb3FOQp", nom: "Stock à date", type: "formula" },
       numeroAutomatique: { id: "fldQB2ws6fc14dDAZ", nom: "Numéro automatique", type: "autoNumber" },
       dateDerniereVente: { id: "fldlpNHycmgjRiMEX", nom: "date dernière vente", type: "multipleLookupValues" },
       numeroAvantDerniereVente: { id: "fldLU6maaJdz8uQ1K", nom: "Numéro avant dernière vente", type: "multipleLookupValues" },
       synthese: { id: "fldFLQ2k0VwYJxp1j", nom: "Synthèse", type: "multipleRecordLinks" },
-      updateFigures: { id: "fldg5wtvuBAoajJ4f", nom: "Update figures", type: "checkbox" },
       isLastSale: { id: "flds9FC1TRpQRXKKQ", nom: "is last sale ?", type: "formula" },
-      isPrevSale: { id: "fldMcY0IqKib3qgFg", nom: "Is prev sale ?", type: "formula" },
     },
   },
   autresRecettes: {
@@ -251,7 +221,6 @@ export const tables = {
       montantHt: { id: "fldacqZfm7ro5zpdE", nom: "Montant HT", type: "currency" },
       montantTtc: { id: "fldFP8WowOuWbNOpP", nom: "Montant TTC", type: "currency" },
       facture: { id: "fldzR8pSVids63jO9", nom: "facture", type: "multipleAttachments" },
-      famille: { id: "fld2Wvutc9bPlx2gJ", nom: "Famille", type: "multipleLookupValues" },
       travaux: { id: "fld5Od89BxYsjaPAU", nom: "Travaux", type: "multipleRecordLinks" },
       campagne: { id: "fldFQ0TX5hJlnxVvn", nom: "Campagne", type: "multipleRecordLinks" },
       section: { id: "fldW2yA9zqFyEVyrW", nom: "Section", type: "singleSelect" },
@@ -267,6 +236,7 @@ export const tables = {
       unite: { id: "fldah3SlSKVHrFr6y", nom: "Unité", type: "multipleLookupValues" },
       quantiteUtilisee: { id: "fldxNDOWa8OQUtgYZ", nom: "Quantité utilisée", type: "rollup" },
       quantiteRestante: { id: "fldWK1y9fYzP18gGy", nom: "Quantité restante", type: "formula" },
+      statutCampagne: { id: "flddwBKrUOuRVRdt8", nom: "Statut campagne", type: "multipleLookupValues" },
     },
   },
   travaux: {
@@ -291,13 +261,13 @@ export const tables = {
     nom: "Produit",
     champs: {
       produit: { id: "fldtlxUldEvNfzsZ6", nom: "Produit", type: "singleLineText" },
-      quantiteAcheteeTotal: { id: "fldXLvpoyPvP3WoJY", nom: "Quantité achetée (total)", type: "rollup" },
       achat: { id: "fldSnMsfTUELnuPRD", nom: "Achat", type: "multipleRecordLinks" },
       nbAchats: { id: "fldUnUjfX1Q9yQteW", nom: "Nb achats", type: "count" },
-      totalAcheteEuros: { id: "fldumxusTCRAxV5MY", nom: "Total acheté (€)", type: "rollup" },
       categorie: { id: "fldiL6RAXx6Y03Eg4", nom: "Catégorie", type: "singleSelect" },
       unite: { id: "fldjdo0wsdvKeMhxS", nom: "Unité", type: "singleSelect" },
       dernierPrixUnitaireEuros: { id: "fldsr18E1Hy2xUV5Q", nom: "Dernier prix unitaire (€)", type: "multipleLookupValues" },
+      totalAcheteCampagneEnCoursEuros: { id: "fldofrDSMr95tC9jb", nom: "Total acheté campagne en cours (€)", type: "rollup" },
+      quantiteAcheteeCampagneEnCours: { id: "fldfzRKDT6n2PXgMB", nom: "Quantité achetée campagne en cours", type: "rollup" },
     },
   },
 } as const;

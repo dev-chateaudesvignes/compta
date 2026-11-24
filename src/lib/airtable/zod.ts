@@ -47,13 +47,26 @@ export const choix = z.string().optional();
 /** Choix unique libre, obligatoire. */
 export const choixRequis = z.string().min(1);
 
-/**
- * Choix unique parmi une liste connue, dont l'app dépend (Section, Mode, Unité…).
- * Une option inconnue rend l'enregistrement « à vérifier » plutôt que d'être
- * rangée dans un fourre-tout qui fausserait un total.
- */
-export const choixParmi = <const T extends readonly [string, ...string[]]>(valeurs: T) =>
-  z.enum(valeurs, { error: `valeur inattendue (attendu : ${valeurs.join(", ")})` });
+// Choix parmi une liste connue (Section, Mode, Unité…) : la valeur BRUTE est
+// gardée et la ligne reste comptée. Une valeur hors liste est « signalée » par
+// definirLecture (liste de la page de contrôle, totaux concernés marqués).
+const valeursConnues = new WeakMap<z.ZodType, readonly string[]>();
+
+/** Valeurs attendues d'une brique choixParmi / lookupChoixParmi (sinon undefined). */
+export function valeursConnuesDe(schema: z.ZodType): readonly string[] | undefined {
+  return valeursConnues.get(schema);
+}
+
+function connu<S extends z.ZodType>(schema: S, valeurs: readonly string[]): S {
+  valeursConnues.set(schema, valeurs);
+  return schema;
+}
+
+/** Choix unique obligatoire, parmi une liste connue (valeur hors liste : signalée). */
+export const choixParmi = (valeurs: readonly string[]) => connu(z.string().min(1), valeurs);
+
+/** Choix unique facultatif, parmi une liste connue (valeur hors liste : signalée). */
+export const choixParmiFacultatif = (valeurs: readonly string[]) => connu(z.string().optional(), valeurs);
 
 /** Lien vers 0, 1 ou N enregistrements : toujours un tableau. */
 export const liens = z.array(z.string()).default([]);
@@ -78,12 +91,18 @@ export const lookupNombre = z
   .optional()
   .transform((v) => v?.[0]);
 
+const lookupUnTexte = () =>
+  z
+    .array(z.string())
+    .max(1, "plusieurs valeurs au lieu d'une")
+    .optional()
+    .transform((v) => v?.[0]);
+
 /** Lookup texte / choix (tableau de 0 ou 1 valeur) → le texte, ou undefined. */
-export const lookupTexte = z
-  .array(z.string())
-  .max(1, "plusieurs valeurs au lieu d'une")
-  .optional()
-  .transform((v) => v?.[0]);
+export const lookupTexte = lookupUnTexte();
+
+/** Lookup d'un choix parmi une liste connue (valeur hors liste : signalée). */
+export const lookupChoixParmi = (valeurs: readonly string[]) => connu(lookupUnTexte(), valeurs);
 
 // ---------------------------------------------------------------------------
 // Briques pour ÉCRIRE (schémas stricts des formulaires).
@@ -105,6 +124,10 @@ export const lienAEcrire = idEnregistrement.transform((id) => [id]);
 
 /** Liens à écrire vers 0..N enregistrements. */
 export const liensAEcrire = z.array(idEnregistrement);
+
+/** Choix à écrire : uniquement une valeur de la liste. */
+export const choixAEcrire = <const T extends readonly [string, ...string[]]>(valeurs: T) =>
+  z.enum(valeurs, { error: "choix invalide" });
 
 /** Date « AAAA-MM-JJ » à écrire. */
 export const dateAEcrire = z.iso.date("date invalide");

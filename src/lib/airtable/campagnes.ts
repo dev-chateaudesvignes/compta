@@ -10,6 +10,10 @@ const lecture = definirLecture("campagnes", {
   dateDeFin: date,
   status: choixParmi(["En cours", "Terminé"]),
   anneeDeRecolte: calculRequis, // formule Airtable : on la lit, on ne la recalcule pas
+  // Résultat de l'exploitation : tout est calculé par Airtable, l'app ne fait que lire.
+  resultatCulturesEuros: calculRequis, // rollup Synthèse → Résultat (€)
+  horsCultureEuros: calculRequis, // rollup Achat → Hors culture (€) (ex. bonus TSA)
+  resultatExploitationEuros: calculRequis, // Résultat cultures − Hors culture
 });
 
 export type Campagne = ValeurDe<typeof lecture>;

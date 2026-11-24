@@ -3,19 +3,28 @@ import { z } from "zod";
 import { exigerSession } from "@/lib/auth/session";
 import { listerEnregistrements, type EnregistrementBrut } from "./client";
 import { tables, type CleTable, type Tables } from "./fields";
+import { valeursConnuesDe } from "./zod";
 
 z.config(z.locales.fr()); // messages d'erreur en français dans la liste « à vérifier »
 
-/** Enregistrement mis de côté : n'entre dans aucun calcul, affiché à l'écran. */
+/**
+ * Enregistrement à vérifier dans Airtable. Deux cas :
+ * - `aVerifier` : invalide, mis de côté, n'entre dans aucun calcul, l'écran le signale ;
+ * - `signales` : valide et compté, mais une valeur de liste est inattendue (valeur
+ *   brute gardée) ; listé sur la page de contrôle, les totaux concernés le signalent,
+ *   rien de visible sur les écrans de saisie.
+ */
 export type AVerifier = {
   table: string; // nom lisible de la table
   id: string; // id Airtable de l'enregistrement (rec…)
   champs: { nom: string; probleme: string }[];
 };
 
-export type Lecture<T> = { valides: T[]; aVerifier: AVerifier[] };
+export type Lecture<T> = { valides: T[]; aVerifier: AVerifier[]; signales: AVerifier[] };
 
-export type Parse<T> = { ok: true; valeur: T } | { ok: false; aVerifier: AVerifier };
+export type Parse<T> =
+  | { ok: true; valeur: T; signale?: AVerifier }
+  | { ok: false; aVerifier: AVerifier };
 
 // Forme valide : seulement des clés existantes dans fields.ts pour cette table.
 export type Forme<K extends CleTable, F> = z.ZodRawShape & {
@@ -33,13 +42,26 @@ export function definirLecture<K extends CleTable, F extends Forme<K, F>>(cleTab
   const cles = Object.keys(forme);
   const schema = z.object(forme);
   type Valeur = z.output<typeof schema> & { id: string };
+  const listes = cles.flatMap((k) => {
+    const valeurs = valeursConnuesDe(forme[k] as z.ZodType);
+    return valeurs ? [{ k, valeurs }] : [];
+  });
+
+  function signaler(id: string, valeur: Record<string, unknown>): AVerifier | undefined {
+    const champsSignales = listes
+      .filter(({ k, valeurs }) => typeof valeur[k] === "string" && !valeurs.includes(valeur[k]))
+      .map(({ k }) => ({ nom: champs[k].nom, probleme: `valeur inattendue « ${valeur[k]} »` }));
+    return champsSignales.length ? { table: table.nom, id, champs: champsSignales } : undefined;
+  }
 
   function parser(brut: EnregistrementBrut): Parse<Valeur> {
     const entree: Record<string, unknown> = {};
     for (const k of cles) entree[k] = brut.fields[champs[k].id];
 
     const r = schema.safeParse(entree);
-    if (r.success) return { ok: true, valeur: { ...r.data, id: brut.id } };
+    if (r.success) {
+      return { ok: true, valeur: { ...r.data, id: brut.id }, signale: signaler(brut.id, r.data) };
+    }
 
     const parChamp = new Map<string, string>();
     for (const issue of r.error.issues) {
@@ -77,16 +99,23 @@ export function definirLecture<K extends CleTable, F extends Forme<K, F>>(cleTab
         return !Array.isArray(v) || v.length === 0 || v.includes(filtre.campagne);
       });
     }
-    const resultat: Lecture<Valeur> = { valides: [], aVerifier: [] };
+    const resultat: Lecture<Valeur> = { valides: [], aVerifier: [], signales: [] };
     for (const brut of bruts) {
       const p = parser(brut);
-      if (p.ok) resultat.valides.push(p.valeur);
-      else resultat.aVerifier.push(p.aVerifier);
+      if (p.ok) {
+        resultat.valides.push(p.valeur);
+        if (p.signale) resultat.signales.push(p.signale);
+      } else resultat.aVerifier.push(p.aVerifier);
     }
     return resultat;
   }
 
   return { parser, lister };
+}
+
+/** Ids des enregistrements signalés, pour marquer les totaux qui les contiennent. */
+export function idsSignales(...lectures: Lecture<unknown>[]): Set<string> {
+  return new Set(lectures.flatMap((l) => l.signales.map((s) => s.id)));
 }
 
 /** Type d'un enregistrement valide, à partir d'une lecture déclarée. */

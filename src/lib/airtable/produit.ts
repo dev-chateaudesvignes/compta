@@ -1,7 +1,7 @@
 import "server-only";
 import { definirEcriture } from "./ecriture";
 import { definirLecture, type ValeurDe } from "./lecture";
-import { choixParmi, choixRequis, lookupNombre, nombre, texteRequis } from "./zod";
+import { calcul, choixAEcrire, choixParmi, choixRequis, lookupNombre, nombre, texteRequis } from "./zod";
 
 export const UNITES = ["kg", "t", "l", "dose", "u"] as const;
 
@@ -12,6 +12,9 @@ const lecture = definirLecture("produit", {
   unite: choixParmi(UNITES),
   dernierPrixUnitaireEuros: lookupNombre, // vide si jamais acheté avec une quantité
   nbAchats: nombre,
+  // Rollups filtrés : hors « Report stock N-1 », campagne « En cours » seulement.
+  totalAcheteCampagneEnCoursEuros: calcul,
+  quantiteAcheteeCampagneEnCours: calcul,
 });
 
 export type Produit = ValeurDe<typeof lecture>;
@@ -22,5 +25,5 @@ export const listerProduits = lecture.lister;
 export const ecritureProduit = definirEcriture("produit", {
   produit: texteRequis,
   categorie: choixRequis,
-  unite: choixParmi(UNITES),
+  unite: choixAEcrire(UNITES),
 });
