@@ -2,7 +2,9 @@ import { z } from "zod";
 
 // Briques Zod pour LIRE les champs Airtable. Rappels (cf. CLAUDE.md) :
 // - un champ vide est ABSENT du JSON (undefined, pas 0 ni "") ;
-// - un lien peut contenir 0, 1 ou N enregistrements.
+// - un lien peut contenir 0, 1 ou N enregistrements ;
+// - un lookup renvoie toujours un tableau ;
+// - une formule / un rollup en erreur renvoie un objet ({ error } ou { specialValue }).
 
 /** Texte facultatif. Les espaces autour sont retirés ; "" devient undefined. */
 export const texte = z
@@ -14,11 +16,21 @@ export const texte = z
 /** Texte obligatoire (non vide). */
 export const texteRequis = z.string().trim().min(1);
 
-/** Nombre facultatif (les erreurs de formule Airtable sont des objets → refusés). */
+/** Nombre saisi, facultatif. */
 export const nombre = z.number().optional();
 
-/** Nombre obligatoire. */
+/** Nombre saisi, obligatoire. */
 export const nombreRequis = z.number();
+
+// Formule / rollup : un objet d'erreur Airtable rend l'enregistrement « à vérifier ».
+const MESSAGE_CALCUL = "calcul en erreur dans Airtable";
+const nombreCalcule = z.number({ error: MESSAGE_CALCUL });
+
+/** Formule ou rollup numérique, facultatif (vide = pas de valeur, ex. rendement sans livraison). */
+export const calcul = nombreCalcule.optional();
+
+/** Formule ou rollup numérique, obligatoire. */
+export const calculRequis = nombreCalcule;
 
 /** Date Airtable « AAAA-MM-JJ », obligatoire. */
 export const date = z.iso.date();
@@ -29,14 +41,70 @@ export const dateFacultative = z.iso.date().optional();
 /** Case à cocher : absente = non cochée. */
 export const caseACocher = z.boolean().default(false);
 
-/** Choix unique (liste déroulante). Guillaume peut ajouter des choix : on n'impose pas la liste. */
+/** Choix unique libre (le client peut ajouter des options dans Airtable). */
 export const choix = z.string().optional();
+
+/** Choix unique libre, obligatoire. */
+export const choixRequis = z.string().min(1);
+
+/**
+ * Choix unique parmi une liste connue, dont l'app dépend (Section, Mode, Unité…).
+ * Une option inconnue rend l'enregistrement « à vérifier » plutôt que d'être
+ * rangée dans un fourre-tout qui fausserait un total.
+ */
+export const choixParmi = <const T extends readonly [string, ...string[]]>(valeurs: T) =>
+  z.enum(valeurs, { error: `valeur inattendue (attendu : ${valeurs.join(", ")})` });
 
 /** Lien vers 0, 1 ou N enregistrements : toujours un tableau. */
 export const liens = z.array(z.string()).default([]);
 
 /** Lien qui doit pointer vers exactement 1 enregistrement ; sinon « à vérifier ». */
 export const lienUnique = z
-  .array(z.string())
+  .array(z.string(), { error: "doit être lié à un enregistrement" })
   .length(1, "doit être lié à un seul enregistrement")
   .transform((ids) => ids[0]);
+
+/** Lien facultatif vers au plus 1 enregistrement (0 → undefined, 2 ou plus → « à vérifier »). */
+export const lienFacultatif = z
+  .array(z.string())
+  .max(1, "doit être lié à un seul enregistrement au plus")
+  .optional()
+  .transform((ids) => ids?.[0]);
+
+/** Lookup numérique (tableau de 0 ou 1 valeur) → le nombre, ou undefined. */
+export const lookupNombre = z
+  .array(nombreCalcule)
+  .max(1, "plusieurs valeurs au lieu d'une")
+  .optional()
+  .transform((v) => v?.[0]);
+
+/** Lookup texte / choix (tableau de 0 ou 1 valeur) → le texte, ou undefined. */
+export const lookupTexte = z
+  .array(z.string())
+  .max(1, "plusieurs valeurs au lieu d'une")
+  .optional()
+  .transform((v) => v?.[0]);
+
+// ---------------------------------------------------------------------------
+// Briques pour ÉCRIRE (schémas stricts des formulaires).
+
+/** ID d'enregistrement Airtable (rec…). */
+export const idEnregistrement = z.string().regex(/^rec[A-Za-z0-9]{14}$/, "enregistrement inconnu");
+
+/** Nombre strictement positif (quantité, poids, prix). */
+export const positif = z.number().finite().positive("doit être supérieur à zéro");
+
+/** Montant en euros, arrondi au centime à l'écriture. Peut être négatif (avoir). */
+export const montant = z
+  .number()
+  .finite()
+  .transform((v) => Math.round(v * 100) / 100);
+
+/** Lien à écrire vers 1 enregistrement (l'API attend un tableau). */
+export const lienAEcrire = idEnregistrement.transform((id) => [id]);
+
+/** Liens à écrire vers 0..N enregistrements. */
+export const liensAEcrire = z.array(idEnregistrement);
+
+/** Date « AAAA-MM-JJ » à écrire. */
+export const dateAEcrire = z.iso.date("date invalide");

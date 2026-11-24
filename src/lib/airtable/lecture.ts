@@ -18,7 +18,7 @@ export type Lecture<T> = { valides: T[]; aVerifier: AVerifier[] };
 export type Parse<T> = { ok: true; valeur: T } | { ok: false; aVerifier: AVerifier };
 
 // Forme valide : seulement des clés existantes dans fields.ts pour cette table.
-type Forme<K extends CleTable, F> = z.ZodRawShape & {
+export type Forme<K extends CleTable, F> = z.ZodRawShape & {
   [C in Exclude<keyof F, keyof Tables[K]["champs"]>]: never;
 };
 
@@ -57,12 +57,26 @@ export function definirLecture<K extends CleTable, F extends Forme<K, F>>(cleTab
     };
   }
 
-  async function lister(): Promise<Lecture<Valeur>> {
+  /**
+   * Lit la table. Avec `campagne` (id rec…), ne garde que les lignes liées à
+   * cette campagne, AVANT validation : les anciennes campagnes incomplètes
+   * n'encombrent pas la liste « à vérifier ». Une ligne sans campagne est gardée
+   * (elle part dans « à vérifier »).
+   */
+  async function lister(filtre?: { campagne?: string }): Promise<Lecture<Valeur>> {
     await exigerSession();
-    const bruts = await listerEnregistrements(
+    let bruts = await listerEnregistrements(
       table.id,
       cles.map((k) => champs[k].id),
     );
+    if (filtre?.campagne) {
+      if (!("campagne" in forme)) throw new Error(`${table.nom} : pas de champ campagne lu`);
+      const idChamp = champs.campagne.id;
+      bruts = bruts.filter((b) => {
+        const v = b.fields[idChamp];
+        return !Array.isArray(v) || v.length === 0 || v.includes(filtre.campagne);
+      });
+    }
     const resultat: Lecture<Valeur> = { valides: [], aVerifier: [] };
     for (const brut of bruts) {
       const p = parser(brut);

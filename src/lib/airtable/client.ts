@@ -1,4 +1,5 @@
 import "server-only";
+import { unstable_rethrow } from "next/navigation";
 import { logError } from "@/lib/logger";
 
 // Seul endroit qui parle à l'API Airtable. Côté serveur uniquement.
@@ -53,6 +54,8 @@ export async function listerEnregistrements(
         signal: AbortSignal.timeout(15_000),
       });
     } catch (e) {
+      // Interruption interne de Next (pré-rendu terminé…) : pas une panne Airtable.
+      unstable_rethrow(e);
       logError("airtable.lister", e, { tableId });
       throw new ErreurAirtable("Airtable injoignable");
     }
