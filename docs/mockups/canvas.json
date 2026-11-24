@@ -1,0 +1,157 @@
+{
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 900,
+      "title": "1 · Synthèse",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    {
+      "file": "Livraisons.dc.html",
+      "x": 1520,
+      "y": 0,
+      "w": 1440,
+      "h": 900,
+      "title": "2 · Livraisons",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    {
+      "file": "Ventes.dc.html",
+      "x": 3040,
+      "y": 0,
+      "w": 1440,
+      "h": 900,
+      "title": "3 · Ventes",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    {
+      "file": "Achats.dc.html",
+      "x": 4560,
+      "y": 0,
+      "w": 1440,
+      "h": 900,
+      "title": "4 · Achats",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    {
+      "file": "Depenses.dc.html",
+      "x": 6080,
+      "y": 0,
+      "w": 1440,
+      "h": 900,
+      "title": "5 · Travaux",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    {
+      "file": "Admin.dc.html",
+      "x": 7600,
+      "y": 0,
+      "w": 1440,
+      "h": 900,
+      "title": "6 · Admin",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    {
+      "file": "NouvelleLivraison.dc.html",
+      "x": 1520,
+      "y": 1400,
+      "w": 1440,
+      "h": 900,
+      "title": "2a · Nouvelle livraison",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    {
+      "file": "NouvelleVente.dc.html",
+      "x": 3040,
+      "y": 1400,
+      "w": 1440,
+      "h": 900,
+      "title": "3a · Nouvelle vente",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    {
+      "file": "NouvelAchat.dc.html",
+      "x": 4560,
+      "y": 1400,
+      "w": 1440,
+      "h": 900,
+      "title": "4a · Nouvel achat",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    {
+      "file": "NouveauTravail.dc.html",
+      "x": 6080,
+      "y": 1400,
+      "w": 1440,
+      "h": 900,
+      "title": "5a · Nouveau travail",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    {
+      "file": "AjoutChamp.dc.html",
+      "x": 7600,
+      "y": 1400,
+      "w": 1440,
+      "h": 900,
+      "title": "6a · Ajouter un champ",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    {
+      "file": "NouvelleParcelle.dc.html",
+      "x": 9120,
+      "y": 1400,
+      "w": 1440,
+      "h": 900,
+      "title": "6b · Nouvelle parcelle",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    {
+      "file": "PreparerCampagne.dc.html",
+      "x": 10640,
+      "y": 1400,
+      "w": 1440,
+      "h": 900,
+      "title": "6c · Préparer la campagne",
+      "expand": "fill",
+      "is_interactive": true
+    }
+  ],
+  "annotations": [
+    {
+      "id": "titre",
+      "x": 0,
+      "y": -300,
+      "w": 240,
+      "maxW": 8000,
+      "text": "Gestion ferme — écrans de consultation (campagne 2024/2025, vraies données)",
+      "kind": "title1"
+    },
+    {
+      "id": "forms",
+      "x": 1520,
+      "y": 1100,
+      "w": 240,
+      "maxW": 8000,
+      "text": "Formulaires de saisie (sous la page qui les ouvre)",
+      "kind": "title1"
+    }
+  ],
+  "launch": {
+    "view": "canvas"
+  }
+}

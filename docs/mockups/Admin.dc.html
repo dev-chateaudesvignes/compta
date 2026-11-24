@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Admin</title>
+<script src="./_runtime/react.js"></script>
+<script src="./_runtime/react-dom.js"></script>
+<script src="./_runtime/support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&amp;display=swap">
+<style>
+html,body{height:100%}
+body{margin:0;background:#F6F4EE;color:#1C2B22;font-family:'Atkinson Hyperlegible',Arial,sans-serif;font-size:20px;line-height:1.4}
+a{color:#2E6B3F}a:hover{color:#1F4D2C}
+.app{height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.nav{flex:none;display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:6px 20px;background:#1F5130;border-bottom:5px solid #FACC15}
+.navlink{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:112px;min-height:60px;padding:4px 14px;border-radius:12px;text-decoration:none;color:#FFFFFF;font-size:18px;font-weight:700}
+.navlink:hover{background:#2E6E45;color:#FFFFFF}
+.navlink.on,.navlink.on:hover{background:#FACC15;color:#1C2B22}
+.camp{margin-left:auto;display:flex;align-items:center;gap:12px}
+.camp label{font-size:18px;color:#FFFFFF;font-weight:700}
+.camp select{font:inherit;font-size:21px;font-weight:700;padding:8px 14px;min-height:54px;border:3px solid #FACC15;border-radius:10px;background:#FFFFFF;color:#1C2B22}
+.wrap{flex:1;min-height:0;width:100%;max-width:1440px;margin:0 auto;box-sizing:border-box;padding:10px 24px 14px;display:flex;flex-direction:column;gap:10px;overflow-y:auto}
+.head{flex:none;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px}
+h1{margin:0;font-size:32px;line-height:1.15}
+h2{margin:0;font-size:23px;line-height:1.2}
+.add{text-decoration:none;font:inherit;line-height:1.2;font-size:21px;font-weight:700;display:inline-flex;align-items:center;gap:10px;min-height:50px;padding:4px 24px;border-radius:14px;border:0;background:#15803D;color:#FFFFFF;cursor:pointer;box-shadow:0 4px 0 #0B4F25}
+.add:hover{background:#166534;color:#FFFFFF}
+.split{flex:1;min-height:0;display:grid;grid-template-rows:minmax(0,1fr);gap:14px}
+.card{min-height:0;background:#FFFFFF;border:2px solid #D5D9D2;border-radius:16px;padding:12px 18px 14px;display:flex;flex-direction:column;gap:8px;box-sizing:border-box}
+.cardhead{flex:none;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 16px}
+.box{flex:1;min-height:0;overflow:auto}
+table{border-collapse:collapse;width:100%;font-size:19px}
+th{position:sticky;top:0;z-index:1;background:#FFFFFF;text-align:right;font-size:16px;color:#4A5A50;font-weight:700;padding:4px 12px 6px;border-bottom:2px solid #1C2B22;white-space:normal;vertical-align:bottom;line-height:1.2}
+td{text-align:right;padding:4px 12px;border-bottom:1px solid #E2E5DF;white-space:nowrap;font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left}
+td.name{font-weight:700}
+tr.total td{font-weight:700;font-size:21px;border:0;background:#1F5130;color:#FFFFFF}
+tr.total td.pos,tr.total td.neg{color:#FFFFFF}
+th.tc{border-left:3px solid #1C2B22}
+td.tc{font-weight:700;font-size:21px;background:#F1F4EF;border-left:3px solid #1C2B22;color:#1C2B22}
+tr.total td.tc{background:#14391F;color:#FACC15}
+td.tc.neg{background:#FDE2E2;color:#B91C1C}
+td.tc.pos{background:#DCFCE7;color:#15803D}
+tr.total td.tc.pos,tr.total td.tc.neg{background:#14391F;color:#FACC15}
+.hint{flex:none;margin:0;font-size:17px;font-weight:700;color:#5C4300;background:#FFF1C9;border-radius:8px;padding:4px 12px;align-self:flex-start}
+@media (max-height: 820px){body{font-size:18px}table{font-size:17px}td{padding:2px 10px}td.tc,tr.total td{font-size:19px}h1{font-size:26px}h2{font-size:20px}.navlink{min-height:52px;font-size:16px}.add{min-height:48px;font-size:19px}.pill{min-height:44px;font-size:17px}.wrap{padding:10px 20px 12px;gap:10px}.tile{min-height:52px;padding:8px 14px}.tile b{font-size:19px}.tilegrid .tile{min-height:50px;padding:6px 12px}}
+.neg{color:#A3231B;font-weight:700}
+.pos{color:#1F5A30;font-weight:700}
+.muted{color:#6A766E}
+.flag{display:inline-block;font-size:15px;font-weight:700;padding:1px 9px;border-radius:999px;background:#FFF1C9;color:#5C4300;border:1px solid #E0C46A;margin-left:8px;vertical-align:2px}
+.note{flex:none;margin:0;font-size:16px;color:#4A5A50}
+.tiles{flex:0 1 auto;display:flex;flex-direction:column;gap:10px;min-height:0;overflow:auto}
+.tiles .tile{flex:none}
+.tilegrid{flex:0 1 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));grid-auto-rows:max-content;gap:6px;min-height:0;overflow:auto;align-content:start}
+.tile{font:inherit;color:#1C2B22;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;width:100%;box-sizing:border-box;padding:12px 16px;min-height:64px;border:2px solid #C9CEC6;border-radius:14px;background:#FFFFFF}
+.tile:hover{border-color:#1C2B22}
+.tile.on{border-width:4px;padding:10px 14px}
+.tile .tt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.tl1{display:flex;flex-direction:column;gap:0}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.tl1 .big{font-weight:700;font-size:19px;white-space:nowrap}
+.tile.row{display:grid;grid-template-columns:minmax(0,1fr) 110px minmax(0,1fr) 26px;align-items:center;gap:14px;min-height:40px;padding:3px 14px}
+.tile.row.on{padding:1px 12px}
+.tile.row{line-height:1.2}.tile.row .go svg{display:block;width:22px;height:22px}
+.rn{font-weight:700;font-size:19px}
+.rv{font-weight:700;font-size:19px;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.rs{font-size:17px;color:#3F4E45}
+.rowhead{flex:none;display:grid;grid-template-columns:minmax(0,1fr) 110px minmax(0,1fr) 26px;gap:14px;padding:0 16px;font-size:15px;font-weight:700;color:#4A5A50}
+td.name{white-space:normal;overflow-wrap:anywhere}
+.rowbtn{white-space:normal}
+.tile b{font-size:21px}
+.tile .tile-sub{font-size:17px;color:#3F4E45}
+.tile .go{flex:none;color:#1C2B22;opacity:0}
+.tile.on .go{opacity:1}
+.tilegrid .tile{min-height:58px;padding:9px 14px}
+.tilegrid .tile.on{padding:7px 12px}
+.tilegrid .tile b{font-size:19px}
+.tilegrid .tile .tile-sub{font-size:16px}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{font:inherit;font-size:19px;font-weight:700;min-height:48px;padding:4px 20px;border-radius:999px;border:2px solid #1C2B22;background:#FFFFFF;color:#1C2B22;cursor:pointer}
+.pill.on{background:#1C2B22;color:#FFFFFF}
+.rowbtn{font:inherit;font-weight:700;font-size:19px;color:#1C2B22;background:none;border:0;padding:0;cursor:pointer;display:flex;align-items:center;gap:8px;text-align:left;text-decoration:underline;text-decoration-color:#9AA79E;text-underline-offset:4px}
+tr.sel td{background:#E3EFE5}
+tr.sel .rowbtn{text-decoration:none;color:#1F4D2C}
+.empty{margin:0;padding:24px;text-align:center;background:#F6F4EE;border-radius:12px}
+.other{flex:none;display:flex;flex-wrap:wrap;gap:4px 16px;align-items:baseline;padding:6px 14px;background:#F6F4EE;border-radius:12px;font-size:17px}
+.sw{display:inline-block;width:18px;height:18px;border-radius:5px;margin-right:10px;vertical-align:-2px;flex:none}
+.mbar{height:12px;background:#E5E7EB;border-radius:6px;overflow:hidden;margin-top:4px}
+.mbar i{display:block;height:100%;border-radius:6px}
+.pill.s0.on{background:#0E7490;border-color:#0E7490}.pill.s1.on{background:#4D7C0F;border-color:#4D7C0F}.pill.s2.on{background:#475569;border-color:#475569}
+.dv{display:grid;grid-template-columns:130px minmax(0,1fr) 2px minmax(0,1fr);align-items:center;row-gap:6px}
+.dv .lab{font-weight:700;font-size:19px}
+.dv .ax{align-self:stretch;background:#1C2B22}
+.dv .l{display:flex;justify-content:flex-end;align-items:center;gap:8px}
+.dv .r{display:flex;justify-content:flex-start;align-items:center;gap:8px}
+.dv .b{height:26px}
+.dv .l .b{background:#DC2626;border-radius:6px 0 0 6px}
+.dv .r .b{background:#16A34A;border-radius:0 6px 6px 0}
+.dv .v{font-weight:700;font-size:18px;white-space:nowrap}
+.stack{display:flex;gap:3px;height:64px}
+.stack div{display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-weight:700;font-size:20px;min-width:0}
+.stack div:first-child{border-radius:10px 0 0 10px}.stack div:last-child{border-radius:0 10px 10px 0}
+.leg{display:flex;flex-direction:column;gap:8px}
+.leg div{display:flex;align-items:center;gap:10px;font-size:19px}
+.leg b{margin-left:auto}
+@media (max-height: 820px){.tiles .tile.row{min-height:34px;padding:2px 12px}.tiles .tile.row.on{padding:0 10px}.rn,.rv{font-size:17px}.rs{font-size:15px}.mbar{height:8px}.tiles{gap:6px}.tile .tt{gap:0}.tiles .tile{padding:6px 12px;min-height:0}.tiles .tile.on{padding:4px 10px}.rowhead{font-size:14px}}
+@media (max-width: 1360px){table{font-size:17px}td{padding-left:8px;padding-right:8px}th{padding-left:8px;padding-right:8px;font-size:15px}td.tc,tr.total td{font-size:19px}.tile b{font-size:19px}.tile .tile-sub{font-size:16px}.navlink{min-width:96px}}
+@media (max-width: 900px){.split{grid-template-columns:1fr !important}.app{height:auto;overflow:visible}.wrap{overflow:visible}.camp{margin-left:0}}
+
+.fwrap{flex:1;min-height:0;display:grid;gap:14px}
+.fcard{min-height:0;background:#FFFFFF;border:2px solid #D5D9D2;border-radius:16px;padding:16px 20px;display:flex;flex-direction:column;gap:14px;box-sizing:border-box;overflow:auto}
+.field{display:flex;flex-direction:column;gap:6px}
+.field>label,.flabel{font-size:19px;font-weight:700}
+.opt{font-weight:400;color:#4A5A50;font-size:16px}
+.help{font-size:16px;color:#4A5A50;margin:0}
+.inp{font:inherit;font-size:22px;font-weight:700;color:#1C2B22;min-height:54px;padding:6px 14px;border:2px solid #6A766E;border-radius:10px;background:#FFFFFF;box-sizing:border-box;width:100%}
+.inp:focus{outline:3px solid #FACC15;outline-offset:1px;border-color:#1C2B22}
+.unit{display:flex;align-items:center;gap:10px}
+.unit .inp{flex:1}
+.unit span{font-size:20px;font-weight:700;color:#3F4E45;min-width:40px}
+.row2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.row4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.choice{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.cbtn{font:inherit;font-size:20px;font-weight:700;color:#1C2B22;min-height:60px;padding:6px 10px;border:3px solid #C9CEC6;border-radius:14px;background:#FFFFFF;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px}
+.cbtn:hover{border-color:#1C2B22}
+.camp-info{font-size:17px;color:#1F5130;font-weight:700}
+.actions{flex:none;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.cancel{font-size:20px;font-weight:700;color:#1C2B22;text-decoration:underline;text-underline-offset:4px;min-height:54px;display:inline-flex;align-items:center}
+.save{font:inherit;font-size:23px;font-weight:700;min-height:62px;padding:8px 34px;border:0;border-radius:14px;background:#15803D;color:#FFFFFF;cursor:pointer;box-shadow:0 4px 0 #0B4F25;display:inline-flex;align-items:center;gap:10px}
+.save:hover{background:#166534}
+.more{font:inherit;font-size:18px;font-weight:700;color:#1C2B22;background:#F1F4EF;border:2px dashed #9AA79E;border-radius:12px;min-height:48px;padding:6px 16px;cursor:pointer;text-align:left}
+.total-line{display:flex;justify-content:space-between;align-items:baseline;gap:12px;background:#F1F4EF;border-radius:12px;padding:12px 16px}
+.total-line b{font-size:30px}
+.done{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center}
+.done .ok{width:96px;height:96px;border-radius:50%;background:#DCFCE7;color:#15803D;display:flex;align-items:center;justify-content:center}
+.done h1{font-size:40px}
+.recap{background:#FFFFFF;border:2px solid #D5D9D2;border-radius:16px;padding:14px 26px;font-size:21px;display:flex;flex-direction:column;gap:6px;text-align:left;min-width:520px}
+.recap div{display:flex;justify-content:space-between;gap:30px}
+.recap span{color:#4A5A50}
+.btnrow{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.sec{font:inherit;font-size:21px;font-weight:700;min-height:58px;padding:8px 26px;border-radius:14px;border:3px solid #1C2B22;background:#FFFFFF;color:#1C2B22;text-decoration:none;display:inline-flex;align-items:center}
+.sec:hover{background:#F1F4EF;color:#1C2B22}
+.check{display:flex;align-items:center;gap:12px;font:inherit;font-size:20px;font-weight:700;color:#1C2B22;min-height:52px;padding:6px 14px;border:3px solid #C9CEC6;border-radius:12px;background:#FFFFFF;cursor:pointer;width:100%;box-sizing:border-box;text-align:left}
+.box2{width:28px;height:28px;border:3px solid #1C2B22;border-radius:6px;display:flex;align-items:center;justify-content:center;background:#FFFFFF;flex:none}
+.check .amt{margin-left:auto;font-variant-numeric:tabular-nums}
+.drop{display:flex;align-items:center;gap:14px;border:3px dashed #9AA79E;border-radius:14px;padding:12px 16px;font-size:19px;font-weight:700;background:#FAFAF7;min-height:54px;box-sizing:border-box;cursor:pointer;font-family:inherit;color:#1C2B22;width:100%}
+.sugg{border:2px solid #6A766E;border-top:0;border-radius:0 0 10px 10px;margin-top:-8px;background:#FFFFFF}
+.sugg button{font:inherit;display:flex;justify-content:space-between;width:100%;padding:8px 14px;border:0;border-top:1px solid #E2E5DF;background:#FFFFFF;font-size:18px;cursor:pointer;color:#1C2B22;text-align:left}
+.sugg button.on{background:#E3EFE5;font-weight:700}
+.info{background:#EEF3EE;border-radius:12px;padding:10px 14px;font-size:18px}
+.tabs{display:flex;gap:8px}
+.tab{font:inherit;font-size:21px;font-weight:700;min-height:54px;padding:6px 24px;border-radius:12px 12px 0 0;border:2px solid #D5D9D2;border-bottom:0;background:#EEF0EA;color:#1C2B22;cursor:pointer}
+.tab.on{background:#FFFFFF;border-color:#1C2B22;border-width:3px}
+.cpill{display:inline-flex;align-items:center;gap:8px;font-weight:700;padding:0 12px;border-radius:999px;border:2px solid;font-size:17px;line-height:1.5}
+.ok-line{color:#15803D;font-weight:700}
+.mini{font:inherit;font-size:15px;font-weight:700;min-height:32px;padding:0 9px;border-radius:999px;border:2px solid #C9CEC6;background:#FFFFFF;color:#1C2B22;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.inp::placeholder{color:#A3ACA5;font-weight:400}
+.srow{display:flex;align-items:center;gap:12px;min-height:52px;padding:4px 12px;border:3px solid #C9CEC6;border-radius:12px;background:#FFFFFF;box-sizing:border-box}
+.scheck{font:inherit;font-size:20px;font-weight:700;color:#1C2B22;background:none;border:0;padding:0;display:flex;align-items:center;gap:12px;cursor:pointer;flex:1;text-align:left;min-height:44px}
+.sval{display:flex;align-items:center;gap:6px}
+.sval .inp{width:110px;min-height:42px;text-align:right;padding:2px 10px}
+.sval span{font-size:18px;font-weight:700;min-width:22px}
+.samt{min-width:90px;text-align:right;font-size:20px;font-variant-numeric:tabular-nums}
+@media (max-height: 820px){.inp{min-height:46px;font-size:19px}.fcard{gap:10px;padding:12px 16px}.cbtn{min-height:48px;font-size:18px}.check{min-height:42px;font-size:18px}.save{min-height:52px;font-size:20px}.field{gap:3px}.drop{min-height:46px}}
+</style>
+</helmet>
+<div class="app" style="font-family: 'Atkinson Hyperlegible', Arial, sans-serif; color: #1C2B22; background: #F6F4EE">
+<nav class="nav" aria-label="Menu principal">
+<a class="navlink" href="Main.dc.html"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11.5 14 4l10 7.5"></path><path d="M6.5 10v13h15V10"></path><path d="M11.5 23v-6.5h5V23"></path></svg><span>Synthèse</span></a>
+<a class="navlink" href="Livraisons.dc.html"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 8.5h18v8h-18z"></path><path d="M4.5 8.5c2-3.8 12-3.8 14 0"></path><circle cx="7.5" cy="20" r="2.4"></circle><circle cx="14.5" cy="20" r="2.4"></circle><path d="M20.5 14h5"></path></svg><span>Livraisons</span></a>
+<a class="navlink" href="Ventes.dc.html"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="15" r="7.5"></circle><path d="M14 12a3.5 3.5 0 1 0 0 6M7.5 14h5M7.5 16.5h5"></path><path d="M20 7.5 24.5 3M20.5 3h4v4"></path></svg><span>Ventes</span></a>
+<a class="navlink" href="Achats.dc.html"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h3l2.6 12.5h12.4l2.4-9H7.5"></path><circle cx="10.5" cy="21.5" r="1.8"></circle><circle cx="19" cy="21.5" r="1.8"></circle></svg><span>Achats</span></a>
+<a class="navlink" href="Depenses.dc.html"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2.8h8"></path><path d="M14 2.8v10"></path><path d="M8.5 12.8h11v5.4a5.5 5.5 0 0 1-11 0z"></path></svg><span>Travaux</span></a>
+<a class="navlink on" href="Admin.dc.html" aria-current="page"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="14" cy="14" r="3.6"></circle><path d="M14 2.8l1.9 2.6 3.1-.9.6 3.2 3.1 1-1 3.1 2.5 2.1-2.5 2.1 1 3.1-3.1 1-.6 3.2-3.1-.9L14 25.2l-1.9-2.6-3.1.9-.6-3.2-3.1-1 1-3.1L3.8 14l2.5-2.1-1-3.1 3.1-1 .6-3.2 3.1.9z"></path></svg><span>Admin</span></a>
+<div class="camp"><label for="campagne">Campagne</label><select id="campagne"><option>2024 / 2025</option><option>2025 / 2026</option></select></div>
+</nav>
+<main class="wrap">
+
+<div class="head"><h1>Admin</h1><div class="tabs" role="tablist"><button type="button" role="tab" class="{{tabA.cls}}" aria-selected="{{tabA.on}}" onClick="{{tabA.pick}}">Assolement</button><button type="button" role="tab" class="{{tabP.cls}}" aria-selected="{{tabP.on}}" onClick="{{tabP.pick}}">Parcellaire</button><button type="button" role="tab" class="{{tabC.cls}}" aria-selected="{{tabC.on}}" onClick="{{tabC.pick}}">Cultures</button></div></div>
+<sc-if value="{{isA}}" hint-placeholder-val="{{true}}">
+<div class="split" style="grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr)">
+<section class="card" aria-labelledby="t-as">
+<div class="cardhead"><h2 id="t-as">Assolement — récolte 2025 (campagne 2024 / 2025)</h2></div>
+<div class="box"><table>
+<thead><tr><th scope="col">Champ</th><th scope="col" style="text-align: left">Culture</th><th scope="col" class="tc">Surface PAC</th><th scope="col"><span class="sr-only">Retirer</span></th></tr></thead>
+<tbody>
+<sc-for list="{{arows}}" as="r" hint-placeholder-count="14"><tr><td class="name">{{r.champ}}</td><td style="text-align: left"><span class="cpill" style="border-color: {{r.col}}; background: {{r.bg}}"><span class="sw" style="background: {{r.col}}; margin: 0; width: 14px; height: 14px"></span>{{r.cult}} ▾</span></td><td class="tc">{{r.pac}}</td><td style="width: 120px"><button type="button" class="mini" style="border-color: #B91C1C; color: #B91C1C" aria-label="Retirer {{r.champ}}" onClick="{{r.del}}">✕ Retirer</button></td></tr></sc-for>
+<tr class="total"><td>Total</td><td></td><td class="tc">{{apac}}</td><td></td></tr>
+</tbody></table></div>
+</section>
+<section class="card" aria-labelledby="t-chk">
+<h2 id="t-chk">Contrôle</h2>
+<div class="info" style="display: flex; flex-direction: column; gap: 6px"><span>Total de l’assolement : <b>{{apac}}</b></span><span>Surface déclarée à la PAC : <b>63,98 ha</b></span><span class="ok-line">✓ Les deux correspondent</span></div>
+<a href="AjoutChamp.dc.html" class="sec" style="justify-content: center">+ Ajouter un champ</a>
+<div style="margin-top: auto; display: flex; flex-direction: column; gap: 10px">
+<a href="PreparerCampagne.dc.html" class="save" style="text-decoration: none; justify-content: center; font-size: 20px">Préparer la campagne 2025 / 2026</a>
+</div>
+</section>
+</div>
+</sc-if>
+<sc-if value="{{isP}}" hint-placeholder-val="{{false}}">
+<div class="split" style="grid-template-columns: minmax(340px, 32%) minmax(0, 1fr)">
+<section class="card" aria-labelledby="t-ld">
+<div class="cardhead"><h2 id="t-ld">Lieux-dits</h2><span class="opt">{{np}} parcelles · {{ncad}}</span></div>
+<div class="tilegrid" style="grid-template-columns: repeat(2, minmax(0, 1fr))" role="group" aria-label="Choisir le lieu-dit">
+<sc-for list="{{ldt}}" as="t" hint-placeholder-count="10"><button type="button" class="{{t.cls}}" style="border-color: {{t.bc}}; background: {{t.bg}}; min-height: 44px; padding: 4px 12px; font-size: 17px; font-weight: 700; line-height: 1.2" aria-pressed="{{t.on}}" onClick="{{t.pick}}">{{t.name}}</button></sc-for>
+</div>
+</section>
+<section class="card" aria-labelledby="t-pa">
+<div class="cardhead"><h2 id="t-pa">Parcelles : {{ldsel}} <span class="opt">— {{ldsub}}</span></h2><a href="NouvelleParcelle.dc.html" class="sec" style="min-height: 46px; font-size: 18px; padding: 4px 16px">+ Nouvelle parcelle</a></div>
+<div class="box"><table>
+<thead><tr><th scope="col">Section</th><th scope="col" style="text-align: left">Commune</th><th scope="col">Surface cadastre</th><th scope="col">Surface MSA</th><th scope="col" style="text-align: left">Propriétaire</th><th scope="col">Fin de bail</th></tr></thead>
+<tbody><sc-for list="{{parcs}}" as="p" hint-placeholder-count="4"><tr><td class="name">{{p.sec}}</td><td style="text-align: left">{{p.com}}</td><td>{{p.cad}}</td><td>{{p.msa}}</td><td style="text-align: left; white-space: normal">{{p.prop}}</td><td>{{p.bail}}</td></tr></sc-for></tbody>
+</table></div>
+</section>
+</div>
+</sc-if>
+<sc-if value="{{isC}}" hint-placeholder-val="{{false}}">
+<div class="split" style="grid-template-columns: minmax(0, 3fr) minmax(320px, 2fr)">
+<section class="card" aria-labelledby="t-cu">
+<div class="cardhead"><h2 id="t-cu">Cultures</h2><span class="opt">{{nvis}} affichées dans l’assolement</span></div>
+<div class="box"><table>
+<thead><tr><th scope="col">Culture</th><th scope="col" style="text-align: left">Dans l’assolement</th></tr></thead>
+<tbody><sc-for list="{{crows}}" as="c" hint-placeholder-count="8"><tr><td class="name"><span class="sw" style="background: {{c.col}}"></span>{{c.name}}</td><td style="text-align: left"><div class="pills"><button type="button" class="{{c.yc}}" aria-pressed="{{c.yon}}" onClick="{{c.show}}" style="min-height: 40px; font-size: 17px">Affichée</button><button type="button" class="{{c.nc}}" aria-pressed="{{c.non}}" onClick="{{c.hide}}" style="min-height: 40px; font-size: 17px">Masquée</button></div></td></tr></sc-for></tbody>
+</table></div>
+</section>
+<section class="card" aria-labelledby="t-nc">
+<h2 id="t-nc">Nouvelle culture</h2>
+<div class="field"><label for="nc">Nom</label><input id="nc" class="inp" type="text" placeholder="ex. Pois"></div>
+<div class="field"><span class="flabel" id="lab-co">Couleur</span><div class="pills" role="group" aria-labelledby="lab-co"><sc-for list="{{cols}}" as="k" hint-placeholder-count="6"><button type="button" class="mini" style="border-color: {{k.bc}}; min-height: 44px; min-width: 44px; justify-content: center" aria-label="{{k.lab}}" aria-pressed="{{k.on}}" onClick="{{k.pick}}"><span class="sw" style="background: {{k.c}}; margin: 0; width: 22px; height: 22px"></span></button></sc-for></div></div>
+<button type="button" class="save" style="align-self: flex-start"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5 10 17 19 7"></path></svg> Ajouter la culture</button>
+</section>
+</div>
+</sc-if>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+constructor(props) { super(props); this.state = {}; }
+renderVals() {
+const D = {"cults": [{"k": "Blé", "name": "Blé", "col": "#C2410C"}, {"k": "Orge Hiver", "name": "Orge d'hiver", "col": "#2563EB"}, {"k": "Colza", "name": "Colza", "col": "#CA8A04"}, {"k": "Mais", "name": "Maïs", "col": "#A21CAF"}, {"k": "Jachère", "name": "Jachère", "col": "#6B7280"}, {"k": "Orge Printemps", "name": "Orge de printemps", "col": "#0891B2"}, {"k": "Tournesol", "name": "Tournesol", "col": "#EA580C"}, {"k": "Luzerne", "name": "Luzerne", "col": "#65A30D"}], "palette": ["#0891B2", "#EA580C", "#65A30D", "#DB2777", "#7C3AED", "#0F766E"], "arows": [{"champ": "En Combe Martin", "cult": "Blé", "col": "#C2410C", "bg": "#FDE6DA", "pac": "21,58 ha"}, {"champ": "Au pommier", "cult": "Orge d'hiver", "col": "#2563EB", "bg": "#DCE7FD", "pac": "6,58 ha"}, {"champ": "Le Faulot", "cult": "Orge d'hiver", "col": "#2563EB", "bg": "#DCE7FD", "pac": "4,36 ha"}, {"champ": "Les 80", "cult": "Orge d'hiver", "col": "#2563EB", "bg": "#DCE7FD", "pac": "3,64 ha"}, {"champ": "Le Puisot", "cult": "Orge d'hiver", "col": "#2563EB", "bg": "#DCE7FD", "pac": "1,09 ha"}, {"champ": "Le Cerisier", "cult": "Colza", "col": "#CA8A04", "bg": "#FCF0C8", "pac": "7,40 ha"}, {"champ": "En Montant", "cult": "Colza", "col": "#CA8A04", "bg": "#FCF0C8", "pac": "3,96 ha"}, {"champ": "Les Courrières", "cult": "Colza", "col": "#CA8A04", "bg": "#FCF0C8", "pac": "2,09 ha"}, {"champ": "En Voissière", "cult": "Colza", "col": "#CA8A04", "bg": "#FCF0C8", "pac": "1,42 ha"}, {"champ": "Les Courrières", "cult": "Maïs", "col": "#A21CAF", "bg": "#F7DDF8", "pac": "5,74 ha"}, {"champ": "Charme St Foin", "cult": "Maïs", "col": "#A21CAF", "bg": "#F7DDF8", "pac": "0,94 ha"}, {"champ": "En Verfontaine", "cult": "Jachère", "col": "#6B7280", "bg": "#E5E7EB", "pac": "3,29 ha"}, {"champ": "Le Village", "cult": "Jachère", "col": "#6B7280", "bg": "#E5E7EB", "pac": "1,33 ha"}, {"champ": "La Perrode", "cult": "Jachère", "col": "#6B7280", "bg": "#E5E7EB", "pac": "0,56 ha"}], "apac": "63,98 ha", "ldk": ["En Combe Martin", "Les Courrières", "Au pommier", "Champs Talin", "Le Faulot", "Les 80", "En Verfontaine", "Charme St Foin", "Le Cerisier", "En Montant", "Champ l'hermite", "Montsaulées", "Le Village", "En Voissière", "Le Puisot", "La Perrode", "Vignes Blanches"], "ldt": [{"name": "En Combe Martin", "sub": "3 parcelles · 21,42 ha"}, {"name": "Les Courrières", "sub": "7 parcelles · 13,41 ha"}, {"name": "Au pommier", "sub": "2 parcelles · 6,61 ha"}, {"name": "Champs Talin", "sub": "1 parcelle · 5,38 ha"}, {"name": "Le Faulot", "sub": "2 parcelles · 4,41 ha"}, {"name": "Les 80", "sub": "2 parcelles · 3,70 ha"}, {"name": "En Verfontaine", "sub": "2 parcelles · 3,37 ha"}, {"name": "Charme St Foin", "sub": "2 parcelles · 3,19 ha"}, {"name": "Le Cerisier", "sub": "2 parcelles · 2,94 ha"}, {"name": "En Montant", "sub": "2 parcelles · 2,34 ha"}, {"name": "Champ l'hermite", "sub": "1 parcelle · 1,93 ha"}, {"name": "Montsaulées", "sub": "1 parcelle · 1,91 ha"}, {"name": "Le Village", "sub": "2 parcelles · 1,86 ha"}, {"name": "En Voissière", "sub": "1 parcelle · 1,44 ha"}, {"name": "Le Puisot", "sub": "2 parcelles · 1,09 ha"}, {"name": "La Perrode", "sub": "1 parcelle · 0,64 ha"}, {"name": "Vignes Blanches", "sub": "1 parcelle · 0,42 ha"}], "ldd": {"En Combe Martin": [{"sec": "ZC 21", "com": "Bouhans et Feurg", "cad": "0,478 ha", "msa": "0,478 ha", "prop": "Propriétaire F", "bail": "—"}, {"sec": "ZC 22", "com": "Bouhans et Feurg", "cad": "18,552 ha", "msa": "18,372 ha", "prop": "Propriétaire E", "bail": "—"}, {"sec": "ZC 24", "com": "Bouhans et Feurg", "cad": "2,392 ha", "msa": "2,392 ha", "prop": "Propriétaire E", "bail": "—"}], "Les Courrières": [{"sec": "ZC 44", "com": "Bouhans et Feurg", "cad": "1,180 ha", "msa": "1,180 ha", "prop": "Propriétaire E", "bail": "—"}, {"sec": "ZC 45", "com": "Bouhans et Feurg", "cad": "4,520 ha", "msa": "4,520 ha", "prop": "Propriétaire C", "bail": "—"}, {"sec": "ZC 46", "com": "Bouhans et Feurg", "cad": "5,730 ha", "msa": "5,730 ha", "prop": "Propriétaire D", "bail": "—"}, {"sec": "ZC 56", "com": "Bouhans et Feurg", "cad": "0,393 ha", "msa": "0,393 ha", "prop": "Propriétaire E", "bail": "—"}, {"sec": "ZC 57", "com": "Bouhans et Feurg", "cad": "0,270 ha", "msa": "0,270 ha", "prop": "Propriétaire E", "bail": "—"}, {"sec": "ZC 60", "com": "Bouhans et Feurg", "cad": "1,231 ha", "msa": "1,231 ha", "prop": "Propriétaire F", "bail": "—"}, {"sec": "ZC 65", "com": "Bouhans et Feurg", "cad": "0,082 ha", "msa": "0,082 ha", "prop": "Propriétaire E", "bail": "—"}], "Au pommier": [{"sec": "ZR 15", "com": "Auvet", "cad": "3,247 ha", "msa": "3,247 ha", "prop": "Propriétaire E", "bail": "—"}, {"sec": "ZR 16", "com": "Auvet", "cad": "3,366 ha", "msa": "3,366 ha", "prop": "Propriétaire A", "bail": "—"}], "Champs Talin": [{"sec": "ZB 102", "com": "Autrey les Gray", "cad": "5,380 ha", "msa": "5,380 ha", "prop": "Propriétaire F", "bail": "—"}], "Le Faulot": [{"sec": "ZH 10", "com": "Fahy les autrey", "cad": "3,047 ha", "msa": "3,046 ha", "prop": "Propriétaire E", "bail": "—"}, {"sec": "ZH 12", "com": "Fahy les autrey", "cad": "1,368 ha", "msa": "1,368 ha", "prop": "Propriétaire E", "bail": "—"}], "Les 80": [{"sec": "ZC 35", "com": "Fahy les autrey", "cad": "1,536 ha", "msa": "1,536 ha", "prop": "Propriétaire E", "bail": "—"}, {"sec": "ZC 36", "com": "Fahy les autrey", "cad": "2,167 ha", "msa": "2,167 ha", "prop": "Propriétaire E", "bail": "—"}], "En Verfontaine": [{"sec": "ZK 29", "com": "Bouhans et Feurg", "cad": "0,864 ha", "msa": "0,864 ha", "prop": "Propriétaire E", "bail": "—"}, {"sec": "ZK 42", "com": "Bouhans et Feurg", "cad": "2,506 ha", "msa": "2,506 ha", "prop": "Propriétaire F", "bail": "—"}], "Charme St Foin": [{"sec": "ZO 19", "com": "Autrey les Gray", "cad": "0,965 ha", "msa": "0,965 ha", "prop": "Propriétaire E", "bail": "—"}, {"sec": "ZO 22", "com": "Autrey les Gray", "cad": "2,220 ha", "msa": "2,220 ha", "prop": "Propriétaire D", "bail": "31/12/2018"}], "Le Cerisier": [{"sec": "ZB 35", "com": "Autrey les Gray", "cad": "0,225 ha", "msa": "0,225 ha", "prop": "Propriétaire C", "bail": "—"}, {"sec": "ZB 36", "com": "Autrey les Gray", "cad": "2,712 ha", "msa": "2,712 ha", "prop": "Propriétaire C", "bail": "—"}], "En Montant": [{"sec": "ZA 03", "com": "Bouhans et Feurg", "cad": "0,980 ha", "msa": "0,980 ha", "prop": "Propriétaire E", "bail": "—"}, {"sec": "ZA 04", "com": "Bouhans et Feurg", "cad": "1,362 ha", "msa": "1,362 ha", "prop": "Propriétaire D", "bail": "—"}], "Champ l'hermite": [{"sec": "A 01", "com": "Pouilly s/vingeanne", "cad": "1,931 ha", "msa": "1,931 ha", "prop": "Propriétaire B", "bail": "30/09/2014"}], "Montsaulées": [{"sec": "ZB 23", "com": "Bouhans et Feurg", "cad": "1,914 ha", "msa": "1,914 ha", "prop": "Propriétaire E", "bail": "—"}], "Le Village": [{"sec": "C 199", "com": "Bouhans et Feurg", "cad": "0,316 ha", "msa": "0,316 ha", "prop": "Propriétaire F", "bail": "31/10/2015"}, {"sec": "C 380", "com": "Bouhans et Feurg", "cad": "1,541 ha", "msa": "1,541 ha", "prop": "Propriétaire E", "bail": "—"}], "En Voissière": [{"sec": "ZH 84", "com": "Bouhans et Feurg", "cad": "1,440 ha", "msa": "1,440 ha", "prop": "Propriétaire E", "bail": "—"}], "Le Puisot": [{"sec": "ZC 07", "com": "Fahy les autrey", "cad": "0,980 ha", "msa": "0,980 ha", "prop": "Propriétaire E", "bail": "—"}, {"sec": "ZC 40", "com": "Fahy les autrey", "cad": "0,108 ha", "msa": "0,108 ha", "prop": "Propriétaire E", "bail": "—"}], "La Perrode": [{"sec": "ZA 46", "com": "Bouhans et Feurg", "cad": "0,640 ha", "msa": "0,640 ha", "prop": "Propriétaire F", "bail": "—"}], "Vignes Blanches": [{"sec": "C 194", "com": "Bouhans et Feurg", "cad": "0,416 ha", "msa": "0,416 ha", "prop": "Propriétaire F", "bail": "31/10/2018"}]}, "ncad": "76,06 ha", "np": "34"};
+const tab = this.state.tab ?? 'A';
+const mkt = (k) => ({ cls: tab === k ? 'tab on' : 'tab', on: tab === k ? 'true' : 'false', pick: () => this.setState({ tab: k }) });
+const cur = this.state.ld ?? D.ldk[0];
+const ldt = D.ldt.map((t, i) => Object.assign({}, t, { cls: D.ldk[i] === cur ? 'tile on' : 'tile', bc: D.ldk[i] === cur ? '#15803D' : '#C9CEC6', bg: D.ldk[i] === cur ? '#DCFCE7' : '#FFFFFF', on: D.ldk[i] === cur ? 'true' : 'false', pick: () => this.setState({ ld: D.ldk[i] }) }));
+const hid = this.state.hid ?? { 'Tournesol': true, 'Orge Printemps': true, 'Luzerne': true };
+const crows = D.cults.map((c) => { const h = !!hid[c.k]; return { name: c.name, col: c.col, yc: h ? 'pill' : 'pill on', nc: h ? 'pill on' : 'pill', yon: h ? 'false' : 'true', non: h ? 'true' : 'false', show: () => this.setState({ hid: Object.assign({}, hid, { [c.k]: false }) }), hide: () => this.setState({ hid: Object.assign({}, hid, { [c.k]: true }) }) }; });
+const ck = this.state.col ?? 0;
+const cols = D.palette.map((c, i) => ({ c: c, lab: 'Couleur ' + (i + 1), bc: i === ck ? '#1C2B22' : '#C9CEC6', on: i === ck ? 'true' : 'false', pick: () => this.setState({ col: i }) }));
+const gone = this.state.gone ?? {};
+const arows = D.arows.filter((r) => !gone[r.champ]).map((r) => Object.assign({}, r, { del: () => this.setState({ gone: Object.assign({}, gone, { [r.champ]: true }) }) }));
+return { tabC: mkt('C'), isC: tab === 'C', crows: crows, nvis: D.cults.filter((c) => !hid[c.k]).length + ' / ' + D.cults.length, cols: cols,
+  tabA: mkt('A'), tabP: mkt('P'), isA: tab === 'A', isP: tab === 'P', arows: arows, apac: D.apac, ldt: ldt, ldsel: cur, parcs: D.ldd[cur], ldsub: D.ldt[D.ldk.indexOf(cur)].sub, ncad: D.ncad, np: D.np };
+}
+}
+</script>
+</body>
+</html>

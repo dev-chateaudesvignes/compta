@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Achats</title>
+<script src="./_runtime/react.js"></script>
+<script src="./_runtime/react-dom.js"></script>
+<script src="./_runtime/support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&amp;display=swap">
+<style>
+html,body{height:100%}
+body{margin:0;background:#F6F4EE;color:#1C2B22;font-family:'Atkinson Hyperlegible',Arial,sans-serif;font-size:20px;line-height:1.4}
+a{color:#2E6B3F}a:hover{color:#1F4D2C}
+.app{height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.nav{flex:none;display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:6px 20px;background:#1F5130;border-bottom:5px solid #FACC15}
+.navlink{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:112px;min-height:60px;padding:4px 14px;border-radius:12px;text-decoration:none;color:#FFFFFF;font-size:18px;font-weight:700}
+.navlink:hover{background:#2E6E45;color:#FFFFFF}
+.navlink.on,.navlink.on:hover{background:#FACC15;color:#1C2B22}
+.camp{margin-left:auto;display:flex;align-items:center;gap:12px}
+.camp label{font-size:18px;color:#FFFFFF;font-weight:700}
+.camp select{font:inherit;font-size:21px;font-weight:700;padding:8px 14px;min-height:54px;border:3px solid #FACC15;border-radius:10px;background:#FFFFFF;color:#1C2B22}
+.wrap{flex:1;min-height:0;width:100%;max-width:1440px;margin:0 auto;box-sizing:border-box;padding:10px 24px 14px;display:flex;flex-direction:column;gap:10px;overflow-y:auto}
+.head{flex:none;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px}
+h1{margin:0;font-size:32px;line-height:1.15}
+h2{margin:0;font-size:23px;line-height:1.2}
+.add{text-decoration:none;font:inherit;line-height:1.2;font-size:21px;font-weight:700;display:inline-flex;align-items:center;gap:10px;min-height:50px;padding:4px 24px;border-radius:14px;border:0;background:#15803D;color:#FFFFFF;cursor:pointer;box-shadow:0 4px 0 #0B4F25}
+.add:hover{background:#166534;color:#FFFFFF}
+.split{flex:1;min-height:0;display:grid;grid-template-rows:minmax(0,1fr);gap:14px}
+.card{min-height:0;background:#FFFFFF;border:2px solid #D5D9D2;border-radius:16px;padding:12px 18px 14px;display:flex;flex-direction:column;gap:8px;box-sizing:border-box}
+.cardhead{flex:none;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 16px}
+.box{flex:1;min-height:0;overflow:auto}
+table{border-collapse:collapse;width:100%;font-size:19px}
+th{position:sticky;top:0;z-index:1;background:#FFFFFF;text-align:right;font-size:16px;color:#4A5A50;font-weight:700;padding:4px 12px 6px;border-bottom:2px solid #1C2B22;white-space:normal;vertical-align:bottom;line-height:1.2}
+td{text-align:right;padding:4px 12px;border-bottom:1px solid #E2E5DF;white-space:nowrap;font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left}
+td.name{font-weight:700}
+tr.total td{font-weight:700;font-size:21px;border:0;background:#1F5130;color:#FFFFFF}
+tr.total td.pos,tr.total td.neg{color:#FFFFFF}
+th.tc{border-left:3px solid #1C2B22}
+td.tc{font-weight:700;font-size:21px;background:#F1F4EF;border-left:3px solid #1C2B22;color:#1C2B22}
+tr.total td.tc{background:#14391F;color:#FACC15}
+td.tc.neg{background:#FDE2E2;color:#B91C1C}
+td.tc.pos{background:#DCFCE7;color:#15803D}
+tr.total td.tc.pos,tr.total td.tc.neg{background:#14391F;color:#FACC15}
+.hint{flex:none;margin:0;font-size:17px;font-weight:700;color:#5C4300;background:#FFF1C9;border-radius:8px;padding:4px 12px;align-self:flex-start}
+@media (max-height: 820px){body{font-size:18px}table{font-size:17px}td{padding:2px 10px}td.tc,tr.total td{font-size:19px}h1{font-size:26px}h2{font-size:20px}.navlink{min-height:52px;font-size:16px}.add{min-height:48px;font-size:19px}.pill{min-height:44px;font-size:17px}.wrap{padding:10px 20px 12px;gap:10px}.tile{min-height:52px;padding:8px 14px}.tile b{font-size:19px}.tilegrid .tile{min-height:50px;padding:6px 12px}}
+.neg{color:#A3231B;font-weight:700}
+.pos{color:#1F5A30;font-weight:700}
+.muted{color:#6A766E}
+.flag{display:inline-block;font-size:15px;font-weight:700;padding:1px 9px;border-radius:999px;background:#FFF1C9;color:#5C4300;border:1px solid #E0C46A;margin-left:8px;vertical-align:2px}
+.note{flex:none;margin:0;font-size:16px;color:#4A5A50}
+.tiles{flex:0 1 auto;display:flex;flex-direction:column;gap:10px;min-height:0;overflow:auto}
+.tiles .tile{flex:none}
+.tilegrid{flex:0 1 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));grid-auto-rows:max-content;gap:6px;min-height:0;overflow:auto;align-content:start}
+.tile{font:inherit;color:#1C2B22;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;width:100%;box-sizing:border-box;padding:12px 16px;min-height:64px;border:2px solid #C9CEC6;border-radius:14px;background:#FFFFFF}
+.tile:hover{border-color:#1C2B22}
+.tile.on{border-width:4px;padding:10px 14px}
+.tile .tt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.tl1{display:flex;flex-direction:column;gap:0}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.tl1 .big{font-weight:700;font-size:19px;white-space:nowrap}
+.tile.row{display:grid;grid-template-columns:minmax(0,1fr) 110px minmax(0,1fr) 26px;align-items:center;gap:14px;min-height:40px;padding:3px 14px}
+.tile.row.on{padding:1px 12px}
+.tile.row{line-height:1.2}.tile.row .go svg{display:block;width:22px;height:22px}
+.rn{font-weight:700;font-size:19px}
+.rv{font-weight:700;font-size:19px;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.rs{font-size:17px;color:#3F4E45}
+.rowhead{flex:none;display:grid;grid-template-columns:minmax(0,1fr) 110px minmax(0,1fr) 26px;gap:14px;padding:0 16px;font-size:15px;font-weight:700;color:#4A5A50}
+td.name{white-space:normal;overflow-wrap:anywhere}
+.rowbtn{white-space:normal}
+.tile b{font-size:21px}
+.tile .tile-sub{font-size:17px;color:#3F4E45}
+.tile .go{flex:none;color:#1C2B22;opacity:0}
+.tile.on .go{opacity:1}
+.tilegrid .tile{min-height:58px;padding:9px 14px}
+.tilegrid .tile.on{padding:7px 12px}
+.tilegrid .tile b{font-size:19px}
+.tilegrid .tile .tile-sub{font-size:16px}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{font:inherit;font-size:19px;font-weight:700;min-height:48px;padding:4px 20px;border-radius:999px;border:2px solid #1C2B22;background:#FFFFFF;color:#1C2B22;cursor:pointer}
+.pill.on{background:#1C2B22;color:#FFFFFF}
+.rowbtn{font:inherit;font-weight:700;font-size:19px;color:#1C2B22;background:none;border:0;padding:0;cursor:pointer;display:flex;align-items:center;gap:8px;text-align:left;text-decoration:underline;text-decoration-color:#9AA79E;text-underline-offset:4px}
+tr.sel td{background:#E3EFE5}
+tr.sel .rowbtn{text-decoration:none;color:#1F4D2C}
+.empty{margin:0;padding:24px;text-align:center;background:#F6F4EE;border-radius:12px}
+.other{flex:none;display:flex;flex-wrap:wrap;gap:4px 16px;align-items:baseline;padding:6px 14px;background:#F6F4EE;border-radius:12px;font-size:17px}
+.sw{display:inline-block;width:18px;height:18px;border-radius:5px;margin-right:10px;vertical-align:-2px;flex:none}
+.mbar{height:12px;background:#E5E7EB;border-radius:6px;overflow:hidden;margin-top:4px}
+.mbar i{display:block;height:100%;border-radius:6px}
+.pill.s0.on{background:#0E7490;border-color:#0E7490}.pill.s1.on{background:#4D7C0F;border-color:#4D7C0F}.pill.s2.on{background:#475569;border-color:#475569}
+.dv{display:grid;grid-template-columns:130px minmax(0,1fr) 2px minmax(0,1fr);align-items:center;row-gap:6px}
+.dv .lab{font-weight:700;font-size:19px}
+.dv .ax{align-self:stretch;background:#1C2B22}
+.dv .l{display:flex;justify-content:flex-end;align-items:center;gap:8px}
+.dv .r{display:flex;justify-content:flex-start;align-items:center;gap:8px}
+.dv .b{height:26px}
+.dv .l .b{background:#DC2626;border-radius:6px 0 0 6px}
+.dv .r .b{background:#16A34A;border-radius:0 6px 6px 0}
+.dv .v{font-weight:700;font-size:18px;white-space:nowrap}
+.stack{display:flex;gap:3px;height:64px}
+.stack div{display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-weight:700;font-size:20px;min-width:0}
+.stack div:first-child{border-radius:10px 0 0 10px}.stack div:last-child{border-radius:0 10px 10px 0}
+.leg{display:flex;flex-direction:column;gap:8px}
+.leg div{display:flex;align-items:center;gap:10px;font-size:19px}
+.leg b{margin-left:auto}
+@media (max-height: 820px){.tiles .tile.row{min-height:34px;padding:2px 12px}.tiles .tile.row.on{padding:0 10px}.rn,.rv{font-size:17px}.rs{font-size:15px}.mbar{height:8px}.tiles{gap:6px}.tile .tt{gap:0}.tiles .tile{padding:6px 12px;min-height:0}.tiles .tile.on{padding:4px 10px}.rowhead{font-size:14px}}
+@media (max-width: 1360px){table{font-size:17px}td{padding-left:8px;padding-right:8px}th{padding-left:8px;padding-right:8px;font-size:15px}td.tc,tr.total td{font-size:19px}.tile b{font-size:19px}.tile .tile-sub{font-size:16px}.navlink{min-width:96px}}
+@media (max-width: 900px){.split{grid-template-columns:1fr !important}.app{height:auto;overflow:visible}.wrap{overflow:visible}.camp{margin-left:0}}
+</style>
+</helmet>
+<div class="app" style="font-family: 'Atkinson Hyperlegible', Arial, sans-serif; color: #1C2B22; background: #F6F4EE">
+<nav class="nav" aria-label="Menu principal">
+<a class="navlink" href="Main.dc.html"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11.5 14 4l10 7.5"></path><path d="M6.5 10v13h15V10"></path><path d="M11.5 23v-6.5h5V23"></path></svg><span>Synthèse</span></a>
+<a class="navlink" href="Livraisons.dc.html"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 8.5h18v8h-18z"></path><path d="M4.5 8.5c2-3.8 12-3.8 14 0"></path><circle cx="7.5" cy="20" r="2.4"></circle><circle cx="14.5" cy="20" r="2.4"></circle><path d="M20.5 14h5"></path></svg><span>Livraisons</span></a>
+<a class="navlink" href="Ventes.dc.html"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="15" r="7.5"></circle><path d="M14 12a3.5 3.5 0 1 0 0 6M7.5 14h5M7.5 16.5h5"></path><path d="M20 7.5 24.5 3M20.5 3h4v4"></path></svg><span>Ventes</span></a>
+<a class="navlink on" href="Achats.dc.html" aria-current="page"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h3l2.6 12.5h12.4l2.4-9H7.5"></path><circle cx="10.5" cy="21.5" r="1.8"></circle><circle cx="19" cy="21.5" r="1.8"></circle></svg><span>Achats</span></a>
+<a class="navlink" href="Depenses.dc.html"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2.8h8"></path><path d="M14 2.8v10"></path><path d="M8.5 12.8h11v5.4a5.5 5.5 0 0 1-11 0z"></path></svg><span>Travaux</span></a>
+<a class="navlink" href="Admin.dc.html"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="14" cy="14" r="3.6"></circle><path d="M14 2.8l1.9 2.6 3.1-.9.6 3.2 3.1 1-1 3.1 2.5 2.1-2.5 2.1 1 3.1-3.1 1-.6 3.2-3.1-.9L14 25.2l-1.9-2.6-3.1.9-.6-3.2-3.1-1 1-3.1L3.8 14l2.5-2.1-1-3.1 3.1-1 .6-3.2 3.1.9z"></path></svg><span>Admin</span></a>
+<div class="camp"><label for="campagne">Campagne</label><select id="campagne"><option>2024 / 2025</option><option>2025 / 2026</option></select></div>
+</nav>
+<main class="wrap">
+
+<div class="head"><h1>Achats</h1><a class="add" href="NouvelAchat.dc.html"><span aria-hidden="true" style="font-size: 30px; line-height: 1">+</span> Nouvel achat</a></div>
+<div class="split" style="grid-template-columns: minmax(0, 5fr) minmax(0, 6fr)">
+<section class="card" aria-labelledby="t-f">
+<div class="cardhead"><h2 id="t-f">Achats par famille</h2><span style="font-size: 19px; font-weight: 700">51 370 €</span></div>
+<div class="tiles" style="gap: 6px" role="group" aria-label="Choisir la famille"><div class="rowhead" aria-hidden="true"><span>Famille</span><span style="text-align: right">Acheté</span><span>En stock au 30 juin</span><span></span></div>
+<sc-for list="{{tiles}}" as="t" hint-placeholder-count="8">
+<button type="button" class="{{t.cls}} row" style="border-color: {{t.bc}}; background: {{t.bg}}" aria-pressed="{{t.on}}" onClick="{{t.pick}}"><span class="rn">{{t.name}}</span><span class="rv">{{t.right}}</span><span class="rs">{{t.sub}}</span><span class="go"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></button>
+</sc-for></div>
+<div class="other"><span style="font-weight: 700">Autres achats :</span><span>Travaux 25 639 € · Charges diverses 19 561 €</span><a href="Depenses.dc.html" style="font-weight: 700">Voir dans Travaux</a></div>
+</section>
+<section class="card" aria-labelledby="t-s">
+<div class="cardhead"><h2 id="t-s">Stock : {{v.title}}</h2><span style="font-size: 18px; color: #4A5A50">{{v.n}}</span></div>
+<div class="box"><table>
+<thead><tr><th scope="col">Produit</th><th scope="col">Dernier achat</th><th scope="col">Acheté</th><th scope="col">En stock au 30 juin</th></tr></thead>
+<tbody><sc-for list="{{v.rows}}" as="r" hint-placeholder-count="6">
+<tr><td class="name">{{r.name}}</td><td>{{r.date}}</td><td>{{r.c}}</td><td class="{{r.scls}}" style="font-weight: 700">{{r.s}}</td></tr>
+</sc-for></tbody>
+</table></div>
+<sc-if value="{{v.hasep}}" hint-placeholder-val="{{true}}"><p class="note" style="font-size: 17px"><b>Épuisés au 30 juin :</b> {{v.ep}}</p></sc-if>
+</section>
+</div>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+constructor(props) { super(props); this.state = {}; }
+renderVals() {
+const D = {"tiles": [{"name": "Engrais", "right": "16 396 €", "sub": "3 000 kg", "col": "#15803D", "bg": "#DCFCE7", "w": "100%"}, {"name": "Composts", "right": "8 356 €", "sub": "—", "col": "#15803D", "bg": "#DCFCE7", "w": "51%"}, {"name": "Semences", "right": "5 681 €", "sub": "—", "col": "#15803D", "bg": "#DCFCE7", "w": "35%"}, {"name": "Désherbants", "right": "5 472 €", "sub": "56,5 l + 1,4 kg", "col": "#15803D", "bg": "#DCFCE7", "w": "33%"}, {"name": "Chaux / CaO-MgO", "right": "3 350 €", "sub": "—", "col": "#15803D", "bg": "#DCFCE7", "w": "20%"}, {"name": "Fongicides", "right": "3 202 €", "sub": "50,2 l", "col": "#15803D", "bg": "#DCFCE7", "w": "20%"}, {"name": "Antilimaces", "right": "2 840 €", "sub": "145 kg", "col": "#15803D", "bg": "#DCFCE7", "w": "17%"}, {"name": "Autres phytos", "right": "1 405 €", "sub": "31,1 l", "col": "#15803D", "bg": "#DCFCE7", "w": "9%"}, {"name": "Insecticides", "right": "1 038 €", "sub": "2,4 l", "col": "#15803D", "bg": "#DCFCE7", "w": "6%"}, {"name": "Glyphosate", "right": "412 €", "sub": "37,0 l", "col": "#15803D", "bg": "#DCFCE7", "w": "3%"}, {"name": "Oligos", "right": "230 €", "sub": "24,6 kg", "col": "#15803D", "bg": "#DCFCE7", "w": "1%"}], "det": {"Engrais": {"title": "Engrais", "n": "1 produit en stock", "ep": "Ammonitrate 33,5, KCl (chlorure de potassium), NP 14.36.0 + 5 MgO, Sulfonitrate 26/37, TSP", "hasep": true, "rows": [{"name": "Urée 46", "date": "31/10/2024", "c": "7 573 €", "s": "3 000 kg", "scls": ""}]}, "Composts": {"title": "Composts", "n": "Rien en stock", "ep": "Compost, Fientes de poules", "hasep": true, "rows": []}, "Semences": {"title": "Semences", "n": "Rien en stock", "ep": "Blé Luxéo, Blé Unik, Colza Avenger, Colza SF 241, Maïs Nataleo, Orge KWS Faro, Prosol Nutrisol", "hasep": true, "rows": []}, "Désherbants": {"title": "Désherbants", "n": "15 produits en stock", "ep": "Aurios, Célio, Daiko, Fuga Delta, Merlin Flex, Mozzar, Proclus, Rapsan TDI, Tomigan", "hasep": true, "rows": [{"name": "Abak", "date": "l’an dernier", "c": "232 €", "s": "1,40 kg", "scls": ""}, {"name": "Avadex 480", "date": "l’an dernier", "c": "1 133 €", "s": "7,00 l", "scls": ""}, {"name": "Axial Pratic", "date": "31/03/2025", "c": "421 €", "s": "1,10 l", "scls": ""}, {"name": "Chardex", "date": "31/03/2025", "c": "283 €", "s": "2,00 l", "scls": ""}, {"name": "Darby (2,4-D)", "date": "l’an dernier", "c": "49 €", "s": "5,00 l", "scls": ""}, {"name": "Florasustar", "date": "l’an dernier", "c": "26 €", "s": "0,20 l", "scls": ""}, {"name": "Izard", "date": "28/02/2025", "c": "379 €", "s": "3,50 l", "scls": ""}, {"name": "Mavrick Smart", "date": "l’an dernier", "c": "77 €", "s": "1,60 l", "scls": ""}, {"name": "Minarix", "date": "31/10/2024", "c": "618 €", "s": "13 l", "scls": ""}, {"name": "Pixxaro EC", "date": "l’an dernier", "c": "53 €", "s": "2,20 l", "scls": ""}, {"name": "Quick 5 %", "date": "30/09/2024", "c": "343 €", "s": "5,00 l", "scls": ""}, {"name": "Select", "date": "l’an dernier", "c": "76 €", "s": "1,60 l", "scls": ""}, {"name": "Tablo 700", "date": "l’an dernier", "c": "74 €", "s": "4,00 l", "scls": ""}, {"name": "U 600 Pro", "date": "30/09/2024", "c": "280 €", "s": "10 l", "scls": ""}, {"name": "Voltage SC", "date": "31/10/2024", "c": "511 €", "s": "0,30 l", "scls": ""}]}, "CaO-MgO / analyse de terre": {"title": "Chaux / CaO-MgO", "n": "Rien en stock", "ep": "CAP 95", "hasep": true, "rows": []}, "Fongicides": {"title": "Fongicides", "n": "5 produits en stock", "ep": "Kojami, Metcostar, Pack Aquino + Aptrell, Pack Paveq + Turret, Sesto", "hasep": true, "rows": [{"name": "Fixa Cuivre", "date": "28/02/2025", "c": "228 €", "s": "30 l", "scls": ""}, {"name": "Metko Gold 90", "date": "28/02/2025", "c": "297 €", "s": "3,20 l", "scls": ""}, {"name": "Pack Kardix + Quibilium", "date": "l’an dernier", "c": "265 €", "s": "1,40 l", "scls": ""}, {"name": "Pack Tréso + Pecari", "date": "28/02/2025", "c": "985 €", "s": "2,60 l", "scls": ""}, {"name": "Stockholm", "date": "28/02/2025", "c": "510 €", "s": "13 l", "scls": ""}]}, "Antilimaces": {"title": "Antilimaces", "n": "2 produits en stock", "ep": "", "hasep": false, "rows": [{"name": "Ironmax Pro", "date": "31/10/2024", "c": "1 487 €", "s": "120 kg", "scls": ""}, {"name": "Techno Intens", "date": "30/09/2024", "c": "1 797 €", "s": "25 kg", "scls": ""}]}, "Autres phytos / adjuvants / régulateurs": {"title": "Autres phytos", "n": "7 produits en stock", "ep": "Horalid, Orfèvre", "hasep": true, "rows": [{"name": "C5 Flex", "date": "28/02/2025", "c": "179 €", "s": "10 l", "scls": ""}, {"name": "Gondor", "date": "l’an dernier", "c": "17 €", "s": "1,00 l", "scls": ""}, {"name": "Huile Mix-In", "date": "30/09/2024", "c": "123 €", "s": "5,50 l", "scls": ""}, {"name": "Neutral Optima", "date": "l’an dernier", "c": "9 €", "s": "0,55 l", "scls": ""}, {"name": "Propyzaflash", "date": "30/11/2025", "c": "868 €", "s": "4,00 l", "scls": ""}, {"name": "Slider", "date": "l’an dernier", "c": "31 €", "s": "9,00 l", "scls": ""}, {"name": "Sticman", "date": "28/02/2025", "c": "99 €", "s": "1,00 l", "scls": ""}]}, "Insecticides": {"title": "Insecticides", "n": "1 produit en stock", "ep": "Ducat, Ercole, Mandarin Gold, Voliam", "hasep": true, "rows": [{"name": "Lambdastar", "date": "30/09/2024", "c": "247 €", "s": "2,35 l", "scls": ""}]}, "Glyphosate": {"title": "Glyphosate", "n": "1 produit en stock", "ep": "", "hasep": false, "rows": [{"name": "Agave", "date": "31/03/2025", "c": "851 €", "s": "37 l", "scls": ""}]}, "Oligos": {"title": "Oligos", "n": "1 produit en stock", "ep": "Oleopro MBO", "hasep": true, "rows": [{"name": "Boravi WG", "date": "l’an dernier", "c": "544 €", "s": "25 kg", "scls": ""}]}}};
+const keys = ["Engrais", "Composts", "Semences", "Désherbants", "CaO-MgO / analyse de terre", "Fongicides", "Antilimaces", "Autres phytos / adjuvants / régulateurs", "Insecticides", "Glyphosate", "Oligos"];
+const cur = this.state.k ?? "Engrais";
+const tiles = D.tiles.map((t, i) => Object.assign({}, t, { cls: keys[i] === cur ? 'tile on' : 'tile', on: keys[i] === cur ? 'true' : 'false', bc: keys[i] === cur ? t.col : '#C9CEC6', bg: keys[i] === cur ? t.bg : '#FFFFFF', pick: () => this.setState({ k: keys[i] }) }));
+return { tiles: tiles, v: D.det[cur] };
+}
+}
+</script>
+</body>
+</html>

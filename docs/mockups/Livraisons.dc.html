@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Livraisons</title>
+<script src="./_runtime/react.js"></script>
+<script src="./_runtime/react-dom.js"></script>
+<script src="./_runtime/support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&amp;display=swap">
+<style>
+html,body{height:100%}
+body{margin:0;background:#F6F4EE;color:#1C2B22;font-family:'Atkinson Hyperlegible',Arial,sans-serif;font-size:20px;line-height:1.4}
+a{color:#2E6B3F}a:hover{color:#1F4D2C}
+.app{height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.nav{flex:none;display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:6px 20px;background:#1F5130;border-bottom:5px solid #FACC15}
+.navlink{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:112px;min-height:60px;padding:4px 14px;border-radius:12px;text-decoration:none;color:#FFFFFF;font-size:18px;font-weight:700}
+.navlink:hover{background:#2E6E45;color:#FFFFFF}
+.navlink.on,.navlink.on:hover{background:#FACC15;color:#1C2B22}
+.camp{margin-left:auto;display:flex;align-items:center;gap:12px}
+.camp label{font-size:18px;color:#FFFFFF;font-weight:700}
+.camp select{font:inherit;font-size:21px;font-weight:700;padding:8px 14px;min-height:54px;border:3px solid #FACC15;border-radius:10px;background:#FFFFFF;color:#1C2B22}
+.wrap{flex:1;min-height:0;width:100%;max-width:1440px;margin:0 auto;box-sizing:border-box;padding:10px 24px 14px;display:flex;flex-direction:column;gap:10px;overflow-y:auto}
+.head{flex:none;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px}
+h1{margin:0;font-size:32px;line-height:1.15}
+h2{margin:0;font-size:23px;line-height:1.2}
+.add{text-decoration:none;font:inherit;line-height:1.2;font-size:21px;font-weight:700;display:inline-flex;align-items:center;gap:10px;min-height:50px;padding:4px 24px;border-radius:14px;border:0;background:#15803D;color:#FFFFFF;cursor:pointer;box-shadow:0 4px 0 #0B4F25}
+.add:hover{background:#166534;color:#FFFFFF}
+.split{flex:1;min-height:0;display:grid;grid-template-rows:minmax(0,1fr);gap:14px}
+.card{min-height:0;background:#FFFFFF;border:2px solid #D5D9D2;border-radius:16px;padding:12px 18px 14px;display:flex;flex-direction:column;gap:8px;box-sizing:border-box}
+.cardhead{flex:none;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 16px}
+.box{flex:1;min-height:0;overflow:auto}
+table{border-collapse:collapse;width:100%;font-size:19px}
+th{position:sticky;top:0;z-index:1;background:#FFFFFF;text-align:right;font-size:16px;color:#4A5A50;font-weight:700;padding:4px 12px 6px;border-bottom:2px solid #1C2B22;white-space:normal;vertical-align:bottom;line-height:1.2}
+td{text-align:right;padding:4px 12px;border-bottom:1px solid #E2E5DF;white-space:nowrap;font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left}
+td.name{font-weight:700}
+tr.total td{font-weight:700;font-size:21px;border:0;background:#1F5130;color:#FFFFFF}
+tr.total td.pos,tr.total td.neg{color:#FFFFFF}
+th.tc{border-left:3px solid #1C2B22}
+td.tc{font-weight:700;font-size:21px;background:#F1F4EF;border-left:3px solid #1C2B22;color:#1C2B22}
+tr.total td.tc{background:#14391F;color:#FACC15}
+td.tc.neg{background:#FDE2E2;color:#B91C1C}
+td.tc.pos{background:#DCFCE7;color:#15803D}
+tr.total td.tc.pos,tr.total td.tc.neg{background:#14391F;color:#FACC15}
+.hint{flex:none;margin:0;font-size:17px;font-weight:700;color:#5C4300;background:#FFF1C9;border-radius:8px;padding:4px 12px;align-self:flex-start}
+@media (max-height: 820px){body{font-size:18px}table{font-size:17px}td{padding:2px 10px}td.tc,tr.total td{font-size:19px}h1{font-size:26px}h2{font-size:20px}.navlink{min-height:52px;font-size:16px}.add{min-height:48px;font-size:19px}.pill{min-height:44px;font-size:17px}.wrap{padding:10px 20px 12px;gap:10px}.tile{min-height:52px;padding:8px 14px}.tile b{font-size:19px}.tilegrid .tile{min-height:50px;padding:6px 12px}}
+.neg{color:#A3231B;font-weight:700}
+.pos{color:#1F5A30;font-weight:700}
+.muted{color:#6A766E}
+.flag{display:inline-block;font-size:15px;font-weight:700;padding:1px 9px;border-radius:999px;background:#FFF1C9;color:#5C4300;border:1px solid #E0C46A;margin-left:8px;vertical-align:2px}
+.note{flex:none;margin:0;font-size:16px;color:#4A5A50}
+.tiles{flex:0 1 auto;display:flex;flex-direction:column;gap:10px;min-height:0;overflow:auto}
+.tiles .tile{flex:none}
+.tilegrid{flex:0 1 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));grid-auto-rows:max-content;gap:6px;min-height:0;overflow:auto;align-content:start}
+.tile{font:inherit;color:#1C2B22;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;width:100%;box-sizing:border-box;padding:12px 16px;min-height:64px;border:2px solid #C9CEC6;border-radius:14px;background:#FFFFFF}
+.tile:hover{border-color:#1C2B22}
+.tile.on{border-width:4px;padding:10px 14px}
+.tile .tt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.tl1{display:flex;flex-direction:column;gap:0}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.tl1 .big{font-weight:700;font-size:19px;white-space:nowrap}
+.tile.row{display:grid;grid-template-columns:minmax(0,1fr) 110px minmax(0,1fr) 26px;align-items:center;gap:14px;min-height:40px;padding:3px 14px}
+.tile.row.on{padding:1px 12px}
+.tile.row{line-height:1.2}.tile.row .go svg{display:block;width:22px;height:22px}
+.rn{font-weight:700;font-size:19px}
+.rv{font-weight:700;font-size:19px;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.rs{font-size:17px;color:#3F4E45}
+.rowhead{flex:none;display:grid;grid-template-columns:minmax(0,1fr) 110px minmax(0,1fr) 26px;gap:14px;padding:0 16px;font-size:15px;font-weight:700;color:#4A5A50}
+td.name{white-space:normal;overflow-wrap:anywhere}
+.rowbtn{white-space:normal}
+.tile b{font-size:21px}
+.tile .tile-sub{font-size:17px;color:#3F4E45}
+.tile .go{flex:none;color:#1C2B22;opacity:0}
+.tile.on .go{opacity:1}
+.tilegrid .tile{min-height:58px;padding:9px 14px}
+.tilegrid .tile.on{padding:7px 12px}
+.tilegrid .tile b{font-size:19px}
+.tilegrid .tile .tile-sub{font-size:16px}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{font:inherit;font-size:19px;font-weight:700;min-height:48px;padding:4px 20px;border-radius:999px;border:2px solid #1C2B22;background:#FFFFFF;color:#1C2B22;cursor:pointer}
+.pill.on{background:#1C2B22;color:#FFFFFF}
+.rowbtn{font:inherit;font-weight:700;font-size:19px;color:#1C2B22;background:none;border:0;padding:0;cursor:pointer;display:flex;align-items:center;gap:8px;text-align:left;text-decoration:underline;text-decoration-color:#9AA79E;text-underline-offset:4px}
+tr.sel td{background:#E3EFE5}
+tr.sel .rowbtn{text-decoration:none;color:#1F4D2C}
+.empty{margin:0;padding:24px;text-align:center;background:#F6F4EE;border-radius:12px}
+.other{flex:none;display:flex;flex-wrap:wrap;gap:4px 16px;align-items:baseline;padding:6px 14px;background:#F6F4EE;border-radius:12px;font-size:17px}
+.sw{display:inline-block;width:18px;height:18px;border-radius:5px;margin-right:10px;vertical-align:-2px;flex:none}
+.mbar{height:12px;background:#E5E7EB;border-radius:6px;overflow:hidden;margin-top:4px}
+.mbar i{display:block;height:100%;border-radius:6px}
+.pill.s0.on{background:#0E7490;border-color:#0E7490}.pill.s1.on{background:#4D7C0F;border-color:#4D7C0F}.pill.s2.on{background:#475569;border-color:#475569}
+.dv{display:grid;grid-template-columns:130px minmax(0,1fr) 2px minmax(0,1fr);align-items:center;row-gap:6px}
+.dv .lab{font-weight:700;font-size:19px}
+.dv .ax{align-self:stretch;background:#1C2B22}
+.dv .l{display:flex;justify-content:flex-end;align-items:center;gap:8px}
+.dv .r{display:flex;justify-content:flex-start;align-items:center;gap:8px}
+.dv .b{height:26px}
+.dv .l .b{background:#DC2626;border-radius:6px 0 0 6px}
+.dv .r .b{background:#16A34A;border-radius:0 6px 6px 0}
+.dv .v{font-weight:700;font-size:18px;white-space:nowrap}
+.stack{display:flex;gap:3px;height:64px}
+.stack div{display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-weight:700;font-size:20px;min-width:0}
+.stack div:first-child{border-radius:10px 0 0 10px}.stack div:last-child{border-radius:0 10px 10px 0}
+.leg{display:flex;flex-direction:column;gap:8px}
+.leg div{display:flex;align-items:center;gap:10px;font-size:19px}
+.leg b{margin-left:auto}
+@media (max-height: 820px){.tiles .tile.row{min-height:34px;padding:2px 12px}.tiles .tile.row.on{padding:0 10px}.rn,.rv{font-size:17px}.rs{font-size:15px}.mbar{height:8px}.tiles{gap:6px}.tile .tt{gap:0}.tiles .tile{padding:6px 12px;min-height:0}.tiles .tile.on{padding:4px 10px}.rowhead{font-size:14px}}
+@media (max-width: 1360px){table{font-size:17px}td{padding-left:8px;padding-right:8px}th{padding-left:8px;padding-right:8px;font-size:15px}td.tc,tr.total td{font-size:19px}.tile b{font-size:19px}.tile .tile-sub{font-size:16px}.navlink{min-width:96px}}
+@media (max-width: 900px){.split{grid-template-columns:1fr !important}.app{height:auto;overflow:visible}.wrap{overflow:visible}.camp{margin-left:0}}
+</style>
+</helmet>
+<div class="app" style="font-family: 'Atkinson Hyperlegible', Arial, sans-serif; color: #1C2B22; background: #F6F4EE">
+<nav class="nav" aria-label="Menu principal">
+<a class="navlink" href="Main.dc.html"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11.5 14 4l10 7.5"></path><path d="M6.5 10v13h15V10"></path><path d="M11.5 23v-6.5h5V23"></path></svg><span>Synthèse</span></a>
+<a class="navlink on" href="Livraisons.dc.html" aria-current="page"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 8.5h18v8h-18z"></path><path d="M4.5 8.5c2-3.8 12-3.8 14 0"></path><circle cx="7.5" cy="20" r="2.4"></circle><circle cx="14.5" cy="20" r="2.4"></circle><path d="M20.5 14h5"></path></svg><span>Livraisons</span></a>
+<a class="navlink" href="Ventes.dc.html"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="15" r="7.5"></circle><path d="M14 12a3.5 3.5 0 1 0 0 6M7.5 14h5M7.5 16.5h5"></path><path d="M20 7.5 24.5 3M20.5 3h4v4"></path></svg><span>Ventes</span></a>
+<a class="navlink" href="Achats.dc.html"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h3l2.6 12.5h12.4l2.4-9H7.5"></path><circle cx="10.5" cy="21.5" r="1.8"></circle><circle cx="19" cy="21.5" r="1.8"></circle></svg><span>Achats</span></a>
+<a class="navlink" href="Depenses.dc.html"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2.8h8"></path><path d="M14 2.8v10"></path><path d="M8.5 12.8h11v5.4a5.5 5.5 0 0 1-11 0z"></path></svg><span>Travaux</span></a>
+<a class="navlink" href="Admin.dc.html"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="14" cy="14" r="3.6"></circle><path d="M14 2.8l1.9 2.6 3.1-.9.6 3.2 3.1 1-1 3.1 2.5 2.1-2.5 2.1 1 3.1-3.1 1-.6 3.2-3.1-.9L14 25.2l-1.9-2.6-3.1.9-.6-3.2-3.1-1 1-3.1L3.8 14l2.5-2.1-1-3.1 3.1-1 .6-3.2 3.1.9z"></path></svg><span>Admin</span></a>
+<div class="camp"><label for="campagne">Campagne</label><select id="campagne"><option>2024 / 2025</option><option>2025 / 2026</option></select></div>
+</nav>
+<main class="wrap">
+
+<div class="head"><h1>Livraisons</h1><a class="add" href="NouvelleLivraison.dc.html"><span aria-hidden="true" style="font-size: 30px; line-height: 1">+</span> Nouvelle livraison</a></div>
+<div class="split" style="grid-template-columns: minmax(250px, 22%) minmax(0, 1fr)">
+<section class="card" aria-labelledby="t-c"><h2 id="t-c">Par culture</h2><div class="tiles" role="group" aria-label="Choisir la culture"><sc-for list="{{tiles}}" as="t" hint-placeholder-count="4">
+<button type="button" class="{{t.cls}}" style="border-color: {{t.bc}}; background: {{t.bg}}" aria-pressed="{{t.on}}" onClick="{{t.pick}}"><span class="tt"><span class="tl1"><b><span class="sw" style="background: {{t.col}}"></span>{{t.name}}</b><span class="big">{{t.right}}</span></span><span class="tile-sub">{{t.sub}}</span><span class="mbar" aria-hidden="true"><i style="width: {{t.w}}; background: {{t.col}}"></i></span></span><span class="go"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></button>
+</sc-for></div></section>
+<section class="card" style="border: 4px solid {{v.col}}" aria-labelledby="t-l">
+<div class="cardhead"><h2 id="t-l"><span class="sw" style="background: {{v.col}}"></span>Livraisons de {{v.title}}</h2><span style="font-size: 19px; font-weight: 700">Total : {{v.tp}} · {{v.tv}}</span></div>
+<div class="box"><sc-if value="{{v.empty}}" hint-placeholder-val="{{false}}"><p class="empty">Aucune livraison enregistrée pour cette culture.</p></sc-if>
+<sc-if value="{{v.full}}" hint-placeholder-val="{{true}}">
+<table>
+<thead><tr><th scope="col">Date</th><th scope="col">Poids net</th><th scope="col">Valeur estimée</th><th scope="col">Humidité</th><th scope="col">Poids spécifique</th><th scope="col">Protéines</th><th scope="col">Impuretés</th></tr></thead>
+<tbody><sc-for list="{{v.rows}}" as="r" hint-placeholder-count="8">
+<tr><td class="name">{{r.date}}</td><td style="font-weight: 700">{{r.poids}}</td><td>{{r.val}}</td><td>{{r.h2o}}</td><td>{{r.ps}}</td><td>{{r.prot}}</td><td>{{r.imp}}</td></tr>
+</sc-for></tbody>
+</table>
+</sc-if></div>
+</section>
+</div>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+constructor(props) { super(props); this.state = {}; }
+renderVals() {
+const D = {"tiles": [{"name": "Blé", "sub": "7 livraisons · 24 454 €", "right": "153,4 t", "col": "#C2410C", "bg": "#FDE6DA", "w": "100%"}, {"name": "Orge d'hiver", "sub": "5 livraisons · 13 567 €", "right": "85,8 t", "col": "#2563EB", "bg": "#DCE7FD", "w": "56%"}, {"name": "Colza", "sub": "5 livraisons · 27 186 €", "right": "55,9 t", "col": "#CA8A04", "bg": "#FCF0C8", "w": "36%"}, {"name": "Maïs", "sub": "Aucune livraison enregistrée", "right": "à vérifier", "col": "#A21CAF", "bg": "#F7DDF8", "w": "0%"}], "det": {"Blé": {"title": "Blé", "rows": [{"date": "03/07/2025", "poids": "17,74 t", "val": "2 829 €", "h2o": "11,6 %", "ps": "82,7", "prot": "11,4 %", "imp": "1,0 %"}, {"date": "03/07/2025", "poids": "22,73 t", "val": "3 625 €", "h2o": "12,3 %", "ps": "82,0", "prot": "13,3 %", "imp": "1,0 %"}, {"date": "03/07/2025", "poids": "18,18 t", "val": "2 898 €", "h2o": "11,4 %", "ps": "82,9", "prot": "12,7 %", "imp": "1,0 %"}, {"date": "03/07/2025", "poids": "27,15 t", "val": "4 329 €", "h2o": "11,7 %", "ps": "83,1", "prot": "11,7 %", "imp": "1,0 %"}, {"date": "03/07/2025", "poids": "24,59 t", "val": "3 922 €", "h2o": "12,5 %", "ps": "82,8", "prot": "11,5 %", "imp": "1,0 %"}, {"date": "03/07/2025", "poids": "17,40 t", "val": "2 775 €", "h2o": "11,5 %", "ps": "82,8", "prot": "13,0 %", "imp": "1,0 %"}, {"date": "03/07/2025", "poids": "25,56 t", "val": "4 076 €", "h2o": "11,5 %", "ps": "83,5", "prot": "12,9 %", "imp": "1,0 %"}], "col": "#C2410C", "empty": false, "full": true, "tp": "153,4 t", "tv": "24 454 €"}, "Orge Hiver": {"title": "Orge d'hiver", "rows": [{"date": "25/06/2025", "poids": "25,47 t", "val": "4 030 €", "h2o": "12,0 %", "ps": "70,3", "prot": "10,3 %", "imp": "1,5 %"}, {"date": "25/06/2025", "poids": "21,18 t", "val": "3 351 €", "h2o": "13,1 %", "ps": "69,1", "prot": "10,6 %", "imp": "1,5 %"}, {"date": "25/06/2025", "poids": "1,73 t", "val": "274 €", "h2o": "12,6 %", "ps": "70,5", "prot": "11,1 %", "imp": "1,5 %"}, {"date": "25/06/2025", "poids": "24,11 t", "val": "3 815 €", "h2o": "12,1 %", "ps": "69,2", "prot": "10,2 %", "imp": "1,5 %"}, {"date": "25/06/2025", "poids": "13,26 t", "val": "2 098 €", "h2o": "12,3 %", "ps": "70,0", "prot": "10,1 %", "imp": "1,5 %"}], "col": "#2563EB", "empty": false, "full": true, "tp": "85,8 t", "tv": "13 567 €"}, "Colza": {"title": "Colza", "rows": [{"date": "29/06/2025", "poids": "6,68 t", "val": "3 251 €", "h2o": "4,6 %", "ps": "—", "prot": "—", "imp": "2,0 %"}, {"date": "01/07/2025", "poids": "12,85 t", "val": "6 251 €", "h2o": "5,0 %", "ps": "—", "prot": "—", "imp": "1,6 %"}, {"date": "03/07/2025", "poids": "19,56 t", "val": "9 515 €", "h2o": "7,7 %", "ps": "—", "prot": "—", "imp": "2,2 %"}, {"date": "03/07/2025", "poids": "5,43 t", "val": "2 643 €", "h2o": "7,8 %", "ps": "—", "prot": "—", "imp": "1,2 %"}, {"date": "03/07/2025", "poids": "11,36 t", "val": "5 526 €", "h2o": "6,9 %", "ps": "—", "prot": "—", "imp": "1,9 %"}], "col": "#CA8A04", "empty": false, "full": true, "tp": "55,9 t", "tv": "27 186 €"}, "Mais": {"title": "Maïs", "rows": [], "col": "#A21CAF", "empty": true, "full": false, "tp": "0,0 t", "tv": "—"}}};
+const keys = ["Bl\u00e9", "Orge Hiver", "Colza", "Mais"];
+const cur = this.state.k ?? "Blé";
+const tiles = D.tiles.map((t, i) => Object.assign({}, t, { cls: keys[i] === cur ? 'tile on' : 'tile', on: keys[i] === cur ? 'true' : 'false', bc: keys[i] === cur ? t.col : '#C9CEC6', bg: keys[i] === cur ? t.bg : '#FFFFFF', pick: () => this.setState({ k: keys[i] }) }));
+return { tiles: tiles, v: D.det[cur] };
+}
+}
+</script>
+</body>
+</html>

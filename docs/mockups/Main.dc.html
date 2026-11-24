@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Synthèse de la campagne</title>
+<script src="./_runtime/react.js"></script>
+<script src="./_runtime/react-dom.js"></script>
+<script src="./_runtime/support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&amp;display=swap">
+<style>
+html,body{height:100%}
+body{margin:0;background:#F6F4EE;color:#1C2B22;font-family:'Atkinson Hyperlegible',Arial,sans-serif;font-size:20px;line-height:1.4}
+a{color:#2E6B3F}a:hover{color:#1F4D2C}
+.app{height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.nav{flex:none;display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:6px 20px;background:#1F5130;border-bottom:5px solid #FACC15}
+.navlink{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:112px;min-height:60px;padding:4px 14px;border-radius:12px;text-decoration:none;color:#FFFFFF;font-size:18px;font-weight:700}
+.navlink:hover{background:#2E6E45;color:#FFFFFF}
+.navlink.on,.navlink.on:hover{background:#FACC15;color:#1C2B22}
+.camp{margin-left:auto;display:flex;align-items:center;gap:12px}
+.camp label{font-size:18px;color:#FFFFFF;font-weight:700}
+.camp select{font:inherit;font-size:21px;font-weight:700;padding:8px 14px;min-height:54px;border:3px solid #FACC15;border-radius:10px;background:#FFFFFF;color:#1C2B22}
+.wrap{flex:1;min-height:0;width:100%;max-width:1440px;margin:0 auto;box-sizing:border-box;padding:10px 24px 14px;display:flex;flex-direction:column;gap:10px;overflow-y:auto}
+.head{flex:none;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px}
+h1{margin:0;font-size:32px;line-height:1.15}
+h2{margin:0;font-size:23px;line-height:1.2}
+.add{text-decoration:none;font:inherit;line-height:1.2;font-size:21px;font-weight:700;display:inline-flex;align-items:center;gap:10px;min-height:50px;padding:4px 24px;border-radius:14px;border:0;background:#15803D;color:#FFFFFF;cursor:pointer;box-shadow:0 4px 0 #0B4F25}
+.add:hover{background:#166534;color:#FFFFFF}
+.split{flex:1;min-height:0;display:grid;grid-template-rows:minmax(0,1fr);gap:14px}
+.card{min-height:0;background:#FFFFFF;border:2px solid #D5D9D2;border-radius:16px;padding:12px 18px 14px;display:flex;flex-direction:column;gap:8px;box-sizing:border-box}
+.cardhead{flex:none;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 16px}
+.box{flex:1;min-height:0;overflow:auto}
+table{border-collapse:collapse;width:100%;font-size:19px}
+th{position:sticky;top:0;z-index:1;background:#FFFFFF;text-align:right;font-size:16px;color:#4A5A50;font-weight:700;padding:4px 12px 6px;border-bottom:2px solid #1C2B22;white-space:normal;vertical-align:bottom;line-height:1.2}
+td{text-align:right;padding:4px 12px;border-bottom:1px solid #E2E5DF;white-space:nowrap;font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left}
+td.name{font-weight:700}
+tr.total td{font-weight:700;font-size:21px;border:0;background:#1F5130;color:#FFFFFF}
+tr.total td.pos,tr.total td.neg{color:#FFFFFF}
+th.tc{border-left:3px solid #1C2B22}
+td.tc{font-weight:700;font-size:21px;background:#F1F4EF;border-left:3px solid #1C2B22;color:#1C2B22}
+tr.total td.tc{background:#14391F;color:#FACC15}
+td.tc.neg{background:#FDE2E2;color:#B91C1C}
+td.tc.pos{background:#DCFCE7;color:#15803D}
+tr.total td.tc.pos,tr.total td.tc.neg{background:#14391F;color:#FACC15}
+.hint{flex:none;margin:0;font-size:17px;font-weight:700;color:#5C4300;background:#FFF1C9;border-radius:8px;padding:4px 12px;align-self:flex-start}
+@media (max-height: 820px){body{font-size:18px}table{font-size:17px}td{padding:2px 10px}td.tc,tr.total td{font-size:19px}h1{font-size:26px}h2{font-size:20px}.navlink{min-height:52px;font-size:16px}.add{min-height:48px;font-size:19px}.pill{min-height:44px;font-size:17px}.wrap{padding:10px 20px 12px;gap:10px}.tile{min-height:52px;padding:8px 14px}.tile b{font-size:19px}.tilegrid .tile{min-height:50px;padding:6px 12px}}
+.neg{color:#A3231B;font-weight:700}
+.pos{color:#1F5A30;font-weight:700}
+.muted{color:#6A766E}
+.flag{display:inline-block;font-size:15px;font-weight:700;padding:1px 9px;border-radius:999px;background:#FFF1C9;color:#5C4300;border:1px solid #E0C46A;margin-left:8px;vertical-align:2px}
+.note{flex:none;margin:0;font-size:16px;color:#4A5A50}
+.tiles{flex:0 1 auto;display:flex;flex-direction:column;gap:10px;min-height:0;overflow:auto}
+.tiles .tile{flex:none}
+.tilegrid{flex:0 1 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));grid-auto-rows:max-content;gap:6px;min-height:0;overflow:auto;align-content:start}
+.tile{font:inherit;color:#1C2B22;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;width:100%;box-sizing:border-box;padding:12px 16px;min-height:64px;border:2px solid #C9CEC6;border-radius:14px;background:#FFFFFF}
+.tile:hover{border-color:#1C2B22}
+.tile.on{border-width:4px;padding:10px 14px}
+.tile .tt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.tl1{display:flex;flex-direction:column;gap:0}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.tl1 .big{font-weight:700;font-size:19px;white-space:nowrap}
+.tile.row{display:grid;grid-template-columns:minmax(0,1fr) 110px minmax(0,1fr) 26px;align-items:center;gap:14px;min-height:40px;padding:3px 14px}
+.tile.row.on{padding:1px 12px}
+.tile.row{line-height:1.2}.tile.row .go svg{display:block;width:22px;height:22px}
+.rn{font-weight:700;font-size:19px}
+.rv{font-weight:700;font-size:19px;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.rs{font-size:17px;color:#3F4E45}
+.rowhead{flex:none;display:grid;grid-template-columns:minmax(0,1fr) 110px minmax(0,1fr) 26px;gap:14px;padding:0 16px;font-size:15px;font-weight:700;color:#4A5A50}
+td.name{white-space:normal;overflow-wrap:anywhere}
+.rowbtn{white-space:normal}
+.tile b{font-size:21px}
+.tile .tile-sub{font-size:17px;color:#3F4E45}
+.tile .go{flex:none;color:#1C2B22;opacity:0}
+.tile.on .go{opacity:1}
+.tilegrid .tile{min-height:58px;padding:9px 14px}
+.tilegrid .tile.on{padding:7px 12px}
+.tilegrid .tile b{font-size:19px}
+.tilegrid .tile .tile-sub{font-size:16px}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{font:inherit;font-size:19px;font-weight:700;min-height:48px;padding:4px 20px;border-radius:999px;border:2px solid #1C2B22;background:#FFFFFF;color:#1C2B22;cursor:pointer}
+.pill.on{background:#1C2B22;color:#FFFFFF}
+.rowbtn{font:inherit;font-weight:700;font-size:19px;color:#1C2B22;background:none;border:0;padding:0;cursor:pointer;display:flex;align-items:center;gap:8px;text-align:left;text-decoration:underline;text-decoration-color:#9AA79E;text-underline-offset:4px}
+tr.sel td{background:#E3EFE5}
+tr.sel .rowbtn{text-decoration:none;color:#1F4D2C}
+.empty{margin:0;padding:24px;text-align:center;background:#F6F4EE;border-radius:12px}
+.other{flex:none;display:flex;flex-wrap:wrap;gap:4px 16px;align-items:baseline;padding:6px 14px;background:#F6F4EE;border-radius:12px;font-size:17px}
+.sw{display:inline-block;width:18px;height:18px;border-radius:5px;margin-right:10px;vertical-align:-2px;flex:none}
+.mbar{height:12px;background:#E5E7EB;border-radius:6px;overflow:hidden;margin-top:4px}
+.mbar i{display:block;height:100%;border-radius:6px}
+.pill.s0.on{background:#0E7490;border-color:#0E7490}.pill.s1.on{background:#4D7C0F;border-color:#4D7C0F}.pill.s2.on{background:#475569;border-color:#475569}
+.dv{display:grid;grid-template-columns:130px minmax(0,1fr) 2px minmax(0,1fr);align-items:center;row-gap:6px}
+.dv .lab{font-weight:700;font-size:19px}
+.dv .ax{align-self:stretch;background:#1C2B22}
+.dv .l{display:flex;justify-content:flex-end;align-items:center;gap:8px}
+.dv .r{display:flex;justify-content:flex-start;align-items:center;gap:8px}
+.dv .b{height:26px}
+.dv .l .b{background:#DC2626;border-radius:6px 0 0 6px}
+.dv .r .b{background:#16A34A;border-radius:0 6px 6px 0}
+.dv .v{font-weight:700;font-size:18px;white-space:nowrap}
+.stack{display:flex;gap:3px;height:64px}
+.stack div{display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-weight:700;font-size:20px;min-width:0}
+.stack div:first-child{border-radius:10px 0 0 10px}.stack div:last-child{border-radius:0 10px 10px 0}
+.leg{display:flex;flex-direction:column;gap:8px}
+.leg div{display:flex;align-items:center;gap:10px;font-size:19px}
+.leg b{margin-left:auto}
+@media (max-height: 820px){.tiles .tile.row{min-height:34px;padding:2px 12px}.tiles .tile.row.on{padding:0 10px}.rn,.rv{font-size:17px}.rs{font-size:15px}.mbar{height:8px}.tiles{gap:6px}.tile .tt{gap:0}.tiles .tile{padding:6px 12px;min-height:0}.tiles .tile.on{padding:4px 10px}.rowhead{font-size:14px}}
+@media (max-width: 1360px){table{font-size:17px}td{padding-left:8px;padding-right:8px}th{padding-left:8px;padding-right:8px;font-size:15px}td.tc,tr.total td{font-size:19px}.tile b{font-size:19px}.tile .tile-sub{font-size:16px}.navlink{min-width:96px}}
+@media (max-width: 900px){.split{grid-template-columns:1fr !important}.app{height:auto;overflow:visible}.wrap{overflow:visible}.camp{margin-left:0}}
+</style>
+</helmet>
+<div class="app" style="font-family: 'Atkinson Hyperlegible', Arial, sans-serif; color: #1C2B22; background: #F6F4EE">
+<nav class="nav" aria-label="Menu principal">
+<a class="navlink on" href="Main.dc.html" aria-current="page"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11.5 14 4l10 7.5"></path><path d="M6.5 10v13h15V10"></path><path d="M11.5 23v-6.5h5V23"></path></svg><span>Synthèse</span></a>
+<a class="navlink" href="Livraisons.dc.html"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 8.5h18v8h-18z"></path><path d="M4.5 8.5c2-3.8 12-3.8 14 0"></path><circle cx="7.5" cy="20" r="2.4"></circle><circle cx="14.5" cy="20" r="2.4"></circle><path d="M20.5 14h5"></path></svg><span>Livraisons</span></a>
+<a class="navlink" href="Ventes.dc.html"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="15" r="7.5"></circle><path d="M14 12a3.5 3.5 0 1 0 0 6M7.5 14h5M7.5 16.5h5"></path><path d="M20 7.5 24.5 3M20.5 3h4v4"></path></svg><span>Ventes</span></a>
+<a class="navlink" href="Achats.dc.html"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h3l2.6 12.5h12.4l2.4-9H7.5"></path><circle cx="10.5" cy="21.5" r="1.8"></circle><circle cx="19" cy="21.5" r="1.8"></circle></svg><span>Achats</span></a>
+<a class="navlink" href="Depenses.dc.html"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2.8h8"></path><path d="M14 2.8v10"></path><path d="M8.5 12.8h11v5.4a5.5 5.5 0 0 1-11 0z"></path></svg><span>Travaux</span></a>
+<a class="navlink" href="Admin.dc.html"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="14" cy="14" r="3.6"></circle><path d="M14 2.8l1.9 2.6 3.1-.9.6 3.2 3.1 1-1 3.1 2.5 2.1-2.5 2.1 1 3.1-3.1 1-.6 3.2-3.1-.9L14 25.2l-1.9-2.6-3.1.9-.6-3.2-3.1-1 1-3.1L3.8 14l2.5-2.1-1-3.1 3.1-1 .6-3.2 3.1.9z"></path></svg><span>Admin</span></a>
+<div class="camp"><label for="campagne">Campagne</label><select id="campagne"><option>2024 / 2025</option><option>2025 / 2026</option></select></div>
+</nav>
+<main class="wrap">
+
+<div class="head"><h1>Synthèse de la campagne 2024 / 2025</h1></div>
+<section class="card" style="flex: none" aria-labelledby="t-cult">
+<div class="cardhead"><h2 id="t-cult">Résultat par culture</h2></div>
+<table>
+<thead><tr><th scope="col">Culture</th><th scope="col">Surface</th><th scope="col">Livré</th><th scope="col">Rendement</th><th scope="col">Ventes</th><th scope="col">Aides et autres</th><th scope="col">Dépenses</th><th scope="col" class="tc">Résultat</th></tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="5">
+<tr><td class="name"><span class="sw" style="background: {{r.col}}"></span>{{r.name}}<sc-if value="{{r.hasflag}}" hint-placeholder-val="{{false}}"><span class="flag">{{r.flag}}</span></sc-if></td><td>{{r.ha}}</td><td>{{r.liv}}</td><td>{{r.rdt}}</td><td>{{r.ve}}</td><td>{{r.ar}}</td><td>{{r.co}}</td><td class="tc {{r.rescls}}">{{r.res}}</td></tr>
+</sc-for>
+<tr class="total"><td>Total</td><td>{{tot.ha}}</td><td>{{tot.liv}}</td><td></td><td>{{tot.ve}}</td><td>{{tot.ar}}</td><td>{{tot.co}}</td><td class="tc {{tot.rescls}}">{{tot.res}}</td></tr>
+</tbody>
+</table>
+</section>
+<section class="card" style="flex: none" aria-labelledby="t-tr">
+<div class="cardhead"><h2 id="t-tr">Travaux agricoles par culture</h2><a href="Depenses.dc.html" style="font-size: 19px; font-weight: 700">Voir tous les travaux</a></div>
+<table>
+<thead><tr><th scope="col">Famille de travaux</th><th scope="col"><span class="sw" style="background: #C2410C; margin-right: 6px; width: 14px; height: 14px"></span>Blé</th><th scope="col"><span class="sw" style="background: #2563EB; margin-right: 6px; width: 14px; height: 14px"></span>Orge d'hiver</th><th scope="col"><span class="sw" style="background: #CA8A04; margin-right: 6px; width: 14px; height: 14px"></span>Colza</th><th scope="col"><span class="sw" style="background: #A21CAF; margin-right: 6px; width: 14px; height: 14px"></span>Maïs</th><th scope="col"><span class="sw" style="background: #6B7280; margin-right: 6px; width: 14px; height: 14px"></span>Jachère</th><th scope="col" class="tc">Total</th></tr></thead>
+<tbody>
+<sc-for list="{{trv}}" as="r" hint-placeholder-count="5">
+<tr><td class="name">{{r.name}}</td><td>{{r.vals.v0}}</td><td>{{r.vals.v1}}</td><td>{{r.vals.v2}}</td><td>{{r.vals.v3}}</td><td>{{r.vals.v4}}</td><td class="tc">{{r.tot}}</td></tr>
+</sc-for>
+<tr class="total"><td>Total</td><td>{{trt.vals.v0}}</td><td>{{trt.vals.v1}}</td><td>{{trt.vals.v2}}</td><td>{{trt.vals.v3}}</td><td>{{trt.vals.v4}}</td><td class="tc">{{trt.tot}}</td></tr>
+</tbody>
+</table>
+</section>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+constructor(props) { super(props); this.state = {}; }
+renderVals() {
+const D = {"rows": [{"col": "#C2410C", "name": "Blé", "flag": "", "hasflag": false, "ha": "21,58 ha", "liv": "153,4 t", "ve": "24 451 €", "ar": "5 296 €", "co": "32 245 €", "rdt": "7,1 t/ha", "res": "−2 497 €", "rescls": "neg", "stock": "0,0 t"}, {"col": "#2563EB", "name": "Orge d'hiver", "flag": "", "hasflag": false, "ha": "15,67 ha", "liv": "85,8 t", "ve": "13 567 €", "ar": "16 073 €", "co": "22 421 €", "rdt": "5,5 t/ha", "res": "+7 220 €", "rescls": "pos", "stock": "0,0 t"}, {"col": "#CA8A04", "name": "Colza", "flag": "", "hasflag": false, "ha": "14,87 ha", "liv": "55,9 t", "ve": "27 186 €", "ar": "6 892 €", "co": "26 437 €", "rdt": "3,8 t/ha", "res": "+7 642 €", "rescls": "pos", "stock": "0,0 t"}, {"col": "#A21CAF", "name": "Maïs", "flag": "à vérifier", "hasflag": true, "ha": "6,68 ha", "liv": "—", "ve": "7 709 €", "ar": "1 517 €", "co": "11 326 €", "rdt": "—", "res": "−2 100 €", "rescls": "neg", "stock": "—"}, {"col": "#6B7280", "name": "Jachère", "flag": "", "hasflag": false, "ha": "5,18 ha", "liv": "—", "ve": "—", "ar": "1 340 €", "co": "1 883 €", "rdt": "—", "res": "−542 €", "rescls": "neg", "stock": "—"}], "tot": {"ha": "63,98 ha", "liv": "295,0 t", "ve": "72 914 €", "ar": "31 120 €", "co": "94 311 €", "res": "+9 722 €", "rescls": "pos"}, "trv": [{"name": "Travail du sol", "vals": {"v0": "4 316 €", "v1": "3 134 €", "v2": "3 665 €", "v3": "1 631 €", "v4": "—"}, "tot": "12 746 €"}, {"name": "Récolte", "vals": {"v0": "2 503 €", "v1": "1 818 €", "v2": "1 699 €", "v3": "739 €", "v4": "—"}, "tot": "6 760 €"}, {"name": "Travaux divers à répartir", "vals": {"v0": "987 €", "v1": "716 €", "v2": "680 €", "v3": "305 €", "v4": "—"}, "tot": "2 688 €"}, {"name": "Autres travaux", "vals": {"v0": "406 €", "v1": "266 €", "v2": "82 €", "v3": "563 €", "v4": "138 €"}, "tot": "1 454 €"}, {"name": "Clause gasoil", "vals": {"v0": "174 €", "v1": "126 €", "v2": "120 €", "v3": "54 €", "v4": "—"}, "tot": "473 €"}], "trt": {"vals": {"v0": "8 385 €", "v1": "6 060 €", "v2": "6 246 €", "v3": "3 292 €", "v4": "138 €"}, "tot": "24 121 €"}};
+return { rows: D.rows, tot: D.tot, trv: D.trv, trt: D.trt };
+}
+}
+</script>
+</body>
+</html>
