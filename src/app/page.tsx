@@ -11,23 +11,14 @@ import type { Synthese } from "@/lib/airtable/synthese";
 import { dateParDefaut } from "@/lib/config";
 import { euros, eurosSigne, estNul, nombre } from "@/lib/format";
 import { lireResultatCampagne } from "@/lib/resultatCampagne";
+import { Chargement } from "./_ecran/Chargement";
 import { Menu } from "./_ecran/Menu";
 
 export default function PageSynthese(props: PageProps<"/">) {
   return (
-    <Suspense fallback={<Attente />}>
+    <Suspense fallback={<Chargement texte="Chargement de la synthèse…" />}>
       <Contenu searchParams={props.searchParams} />
     </Suspense>
-  );
-}
-
-function Attente() {
-  return (
-    <div className="app">
-      <main className="wrap">
-        <p className="empty">Chargement de la synthèse…</p>
-      </main>
-    </div>
   );
 }
 

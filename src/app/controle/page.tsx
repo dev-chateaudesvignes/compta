@@ -15,10 +15,11 @@ import { listerVentes } from "@/lib/airtable/vente";
 import { dateParDefaut } from "@/lib/config";
 import { euros, nombre } from "@/lib/format";
 import { lireResultatCampagne } from "@/lib/resultatCampagne";
+import { Chargement } from "../_ecran/Chargement";
 
 export default function Controle(props: PageProps<"/controle">) {
   return (
-    <Suspense fallback={<p className="p-8 text-xl">Lecture des données…</p>}>
+    <Suspense fallback={<Chargement texte="Lecture des données…" />}>
       <Contenu searchParams={props.searchParams} />
     </Suspense>
   );

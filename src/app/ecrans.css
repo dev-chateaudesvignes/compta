@@ -62,6 +62,18 @@
 .app .sw { display: inline-block; width: 18px; height: 18px; border-radius: 5px; margin-right: 10px; vertical-align: -2px; flex: none; }
 .app th .sw { width: 14px; height: 14px; margin-right: 6px; }
 
+/* Écran d'attente (moulin) : apparaît après un court délai pour ne pas clignoter
+   quand la page arrive vite. */
+.app .chargement { justify-content: center; align-items: center; gap: 12px; animation: chargement-apparait 0.3s ease-out 0.2s both; }
+.app .chargement .moulin { width: 96px; height: auto; }
+.app .chargement .ailes { transform-origin: 60px 44px; animation: chargement-ailes 3.5s linear infinite; }
+.app .chargement .texte { margin: 0; font-size: 24px; font-weight: 700; color: #1F5130; }
+@keyframes chargement-ailes { to { transform: rotate(360deg); } }
+@keyframes chargement-apparait { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .app .chargement, .app .chargement .ailes { animation: none; }
+}
+
 @media (max-height: 820px) {
   .app { font-size: 18px; }
   .app table { font-size: 17px; }
