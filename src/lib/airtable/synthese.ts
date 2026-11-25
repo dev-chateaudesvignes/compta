@@ -1,6 +1,6 @@
 import "server-only";
 import { definirLecture, type ValeurDe } from "./lecture";
-import { calcul, calculRequis, lienUnique, liens, nombre, texteRequis } from "./zod";
+import { calcul, calculRequis, lienUnique, liens, lookupTexte, nombre, texte, texteRequis } from "./zod";
 
 // Synthèse : une ligne par culture × récolte. LECTURE SEULE : tout ce qui est
 // ici est calculé par Airtable (rollups / formules) ; l'app ne recalcule rien.
@@ -8,6 +8,7 @@ import { calcul, calculRequis, lienUnique, liens, nombre, texteRequis } from "./
 const lecture = definirLecture("synthese", {
   idCultureAnnee: texteRequis, // « Blé-2025 », clé des automations de liaison
   culture: lienUnique,
+  nomCulture: lookupTexte, // lookup Culture → Nom culture
   campagne: lienUnique,
   travaux: liens,
   surfacePacHa: calculRequis,
@@ -25,6 +26,14 @@ const lecture = definirLecture("synthese", {
   chargesIntrantsEuros: calculRequis,
   chargesTravauxAgricolesEuros: calculRequis,
   chargesDiversesEuros: calculRequis,
+  // Travaux agricoles par famille (rollups Travaux → Montant filtrés sur la Catégorie)
+  travailDuSolEuros: calculRequis,
+  recolteEuros: calculRequis,
+  travauxDiversARepartirEuros: calculRequis,
+  autresTravauxEuros: calculRequis,
+  clauseGasoilEuros: calculRequis,
+  travauxNonClassesEuros: calculRequis, // travaux agricoles − Σ familles ; ≠ 0 → Alerte
+  alerte: texte, // « à vérifier » si stock < 0 ou travaux non classés
   resultatEuros: calculRequis, // Ventes + Autres recettes − Charges
 });
 

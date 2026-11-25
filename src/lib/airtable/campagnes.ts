@@ -14,6 +14,18 @@ const lecture = definirLecture("campagnes", {
   resultatCulturesEuros: calculRequis, // rollup Synthèse → Résultat (€)
   horsCultureEuros: calculRequis, // rollup Achat → Hors culture (€) (ex. bonus TSA)
   resultatExploitationEuros: calculRequis, // Résultat cultures − Hors culture
+  // Ligne Total de l'écran Synthèse : rollups des lignes Synthèse de la campagne.
+  totalSurfacePacHa: calculRequis,
+  totalLivreT: calculRequis,
+  totalVentesEuros: calculRequis,
+  totalAutresRecettesEuros: calculRequis,
+  totalChargesEuros: calculRequis,
+  totalTravauxAgricolesEuros: calculRequis,
+  totalTravailDuSolEuros: calculRequis,
+  totalRecolteEuros: calculRequis,
+  totalTravauxDiversARepartirEuros: calculRequis,
+  totalAutresTravauxEuros: calculRequis,
+  totalClauseGasoilEuros: calculRequis,
 });
 
 export type Campagne = ValeurDe<typeof lecture>;

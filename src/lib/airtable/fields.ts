@@ -3,30 +3,6 @@
 // Seul fichier du projet qui contient des IDs Airtable (tbl…, fld…).
 //
 // Champs volontairement absents (morts, ou écrits en dur pour chaque culture) :
-//   - Campagnes.Vente Mais
-//   - Campagnes.Livraison Ble
-//   - Campagnes.Livraison Colza
-//   - Campagnes.Livraison Orge Hiver
-//   - Campagnes.Livraison Orge Printemps
-//   - Campagnes.Livraison Tournesol
-//   - Campagnes.Livraison Mais
-//   - Campagnes.Vente Ble
-//   - Campagnes.Vente Colza
-//   - Campagnes.Vente Orge Hiver
-//   - Campagnes.Vente Orge Printemps
-//   - Campagnes.Vente Tournesol
-//   - Livraison.Tonnage Ble
-//   - Livraison.Tonnage Tournesol
-//   - Livraison.Tonnage Colza
-//   - Livraison.Tonnage Orge Hiver
-//   - Livraison.Tonnage Orge Printemps
-//   - Livraison.Tonnage Mais
-//   - Vente.Vente Ble
-//   - Vente.Vente Tournesol
-//   - Vente.Vente Mais
-//   - Vente.Vente Orge Hiver
-//   - Vente.Vente Orge Printemps
-//   - Vente.Vente Colza
 
 export const tables = {
   parcellaire: {
@@ -53,7 +29,6 @@ export const tables = {
       assolement: { id: "fldswnZ1iYTSaPoNa", nom: "Assolement", type: "multipleRecordLinks" },
       livraison: { id: "fldvaE60lt4xeiLdP", nom: "Livraison", type: "multipleRecordLinks" },
       vente: { id: "fldFuUywbfomdftTB", nom: "Vente", type: "multipleRecordLinks" },
-      derniereVente: { id: "fldQ6G9UX6vmEZtRv", nom: "Dernière vente", type: "multipleLookupValues" },
       synthese: { id: "fldlI8SSNaLTJtOXC", nom: "Synthèse", type: "multipleRecordLinks" },
     },
   },
@@ -75,6 +50,17 @@ export const tables = {
       horsCultureEuros: { id: "fldsXsLjFyV6rTlUX", nom: "Hors culture (€)", type: "rollup" },
       resultatCulturesEuros: { id: "fldYowSXtxHjzyxCz", nom: "Résultat cultures (€)", type: "rollup" },
       resultatExploitationEuros: { id: "fldb5fssfrKmWY9Ud", nom: "Résultat exploitation (€)", type: "formula" },
+      totalSurfacePacHa: { id: "fldtyjBvYGX6qo2in", nom: "Total surface PAC (ha)", type: "rollup" },
+      totalLivreT: { id: "flda1ZdG0mpdGQrZY", nom: "Total livré (t)", type: "rollup" },
+      totalVentesEuros: { id: "fldTXgbpwUsZrKRp7", nom: "Total ventes (€)", type: "rollup" },
+      totalAutresRecettesEuros: { id: "fldWhsuy8UBfBFyTJ", nom: "Total autres recettes (€)", type: "rollup" },
+      totalChargesEuros: { id: "fldrRmQeGISWWdTGc", nom: "Total charges (€)", type: "rollup" },
+      totalTravauxAgricolesEuros: { id: "fldWwmsLFaAedUE73", nom: "Total travaux agricoles (€)", type: "rollup" },
+      totalTravailDuSolEuros: { id: "fldWX4vINTxbl6vn2", nom: "Total travail du sol (€)", type: "rollup" },
+      totalRecolteEuros: { id: "fldjcliKJ0Ey58QnW", nom: "Total récolte (€)", type: "rollup" },
+      totalTravauxDiversARepartirEuros: { id: "flddCg6cQ6pgqKUxT", nom: "Total travaux divers à répartir (€)", type: "rollup" },
+      totalAutresTravauxEuros: { id: "fldYWCjnXFO5ABS2k", nom: "Total autres travaux (€)", type: "rollup" },
+      totalClauseGasoilEuros: { id: "flddMwCRqxGI6tcFm", nom: "Total clause gasoil (€)", type: "rollup" },
     },
   },
   synthese: {
@@ -93,17 +79,8 @@ export const tables = {
       livraisonEnT: { id: "fldqol4POHF9d6tJ1", nom: "Livraison en T", type: "formula" },
       venteEnT: { id: "fldDYRBDIkl6064Zj", nom: "Vente en T", type: "rollup" },
       valeurContratsEuros: { id: "fldpmvywmtG3WxBvt", nom: "Valeur contrats (€)", type: "rollup" },
-      rendementEnTHa: { id: "fld8gjkGcYNtS77pJ", nom: "Rendement en T/Ha", type: "formula" },
       prixMoyenDeVenteEnEurosT: { id: "fldDjuFeEN9gDmnym", nom: "Prix moyen de vente en €/T", type: "formula" },
-      derniereVente: { id: "fldLbGmBNGZjatnZM", nom: "Dernière vente", type: "multipleLookupValues" },
       resultatEuros: { id: "fldGq7DCC9mCwob9B", nom: "Résultat (€)", type: "formula" },
-      stock: { id: "fldxC99x8pdbfuGRc", nom: "Stock", type: "formula" },
-      nombreDeLivraison: { id: "fldtf2PCSFMYFHpjY", nom: "Nombre de livraison", type: "count" },
-      nombreDeVente: { id: "fld1xoQnsvHZ7FxzH", nom: "Nombre de vente", type: "count" },
-      avantDerniereVente: { id: "fldKyW4oSijXo3gIk", nom: "Avant dernière vente", type: "formula" },
-      surfacePacHa: { id: "fldxtkblc8rX9Kx71", nom: "Surface PAC (ha)", type: "rollup" },
-      travaux: { id: "fldYTa7EyEBFucwES", nom: "Travaux", type: "multipleRecordLinks" },
-      autresRecettes: { id: "fldO20zOOmdzM9FLf", nom: "Autres recettes", type: "multipleRecordLinks" },
       chargesEuros: { id: "fldcl0ZXA1Qr6js35", nom: "Charges (€)", type: "rollup" },
       chargesIntrantsEuros: { id: "fldojw7I45LU2r2dl", nom: "Charges intrants (€)", type: "rollup" },
       chargesTravauxAgricolesEuros: { id: "fld6yp9bLsP4xYPeo", nom: "Charges travaux agricoles (€)", type: "rollup" },
@@ -112,6 +89,21 @@ export const tables = {
       encaisseEuros: { id: "fldg5ZEgoT3ECSlMr", nom: "Encaissé (€)", type: "currency" },
       ventesEuros: { id: "fldBs9O4wBhWCCpFK", nom: "Ventes (€)", type: "formula" },
       ecartEncaisseContratsEuros: { id: "fldsOGAYMxXZXduwc", nom: "Écart encaissé / contrats (€)", type: "formula" },
+      travailDuSolEuros: { id: "fldJjRPqvRmRyBZyF", nom: "Travail du sol (€)", type: "rollup" },
+      recolteEuros: { id: "fldbj2ywtOGCpBWzk", nom: "Récolte (€)", type: "rollup" },
+      travauxDiversARepartirEuros: { id: "fldStWQUpver99EGb", nom: "Travaux divers à répartir (€)", type: "rollup" },
+      autresTravauxEuros: { id: "fldFDgs1mYGSltCCa", nom: "Autres travaux (€)", type: "rollup" },
+      clauseGasoilEuros: { id: "fldE0LEDdBjTwXoV2", nom: "Clause gasoil (€)", type: "rollup" },
+      alerte: { id: "fld7jrymKy9GECw0E", nom: "Alerte", type: "formula" },
+      travauxNonClassesEuros: { id: "fldvz6Hizgky4h6IL", nom: "Travaux non classés (€)", type: "formula" },
+      nombreDeLivraison: { id: "fldtf2PCSFMYFHpjY", nom: "Nombre de livraison", type: "count" },
+      nombreDeVente: { id: "fld1xoQnsvHZ7FxzH", nom: "Nombre de vente", type: "count" },
+      rendementEnTHa: { id: "fld8gjkGcYNtS77pJ", nom: "Rendement en T/Ha", type: "formula" },
+      stock: { id: "fldxC99x8pdbfuGRc", nom: "Stock", type: "formula" },
+      surfacePacHa: { id: "fldxtkblc8rX9Kx71", nom: "Surface PAC (ha)", type: "rollup" },
+      travaux: { id: "fldYTa7EyEBFucwES", nom: "Travaux", type: "multipleRecordLinks" },
+      autresRecettes: { id: "fldO20zOOmdzM9FLf", nom: "Autres recettes", type: "multipleRecordLinks" },
+      nomCulture: { id: "fldx6onkyNIr7yfdU", nom: "Nom culture", type: "multipleLookupValues" },
     },
   },
   champs: {
@@ -183,17 +175,11 @@ export const tables = {
       date: { id: "fldqowG8olJlEAXNt", nom: "Date", type: "date" },
       quantiteEnTonne: { id: "fldDXR2X2UCP0O57t", nom: "Quantité en tonne", type: "number" },
       prixParTonne: { id: "fldLTJBCBn3pYeGGy", nom: "Prix par tonne", type: "currency" },
-      cumulDesVentesPrev: { id: "fldNMinSmSGDt2Quq", nom: "Cumul des ventes prev", type: "number" },
-      cumulDesVentesEnQuantite: { id: "fldGk5tF8xb3yAs5m", nom: "Cumul des ventes en quantité", type: "formula" },
       valeur: { id: "fld5nryz70fWqVqTj", nom: "Valeur", type: "formula" },
       anneeDeRecolte: { id: "fldX6zm7Na8HLK7o2", nom: "Année de récolte", type: "multipleLookupValues" },
       livraison: { id: "fldk8EQINTzwnFCyi", nom: "Livraison", type: "multipleRecordLinks" },
-      livraisonADate: { id: "fldz83qQ111tnBQSG", nom: "Livraison à date", type: "multipleLookupValues" },
       numeroAutomatique: { id: "fldQB2ws6fc14dDAZ", nom: "Numéro automatique", type: "autoNumber" },
-      dateDerniereVente: { id: "fldlpNHycmgjRiMEX", nom: "date dernière vente", type: "multipleLookupValues" },
-      numeroAvantDerniereVente: { id: "fldLU6maaJdz8uQ1K", nom: "Numéro avant dernière vente", type: "multipleLookupValues" },
       synthese: { id: "fldFLQ2k0VwYJxp1j", nom: "Synthèse", type: "multipleRecordLinks" },
-      isLastSale: { id: "flds9FC1TRpQRXKKQ", nom: "is last sale ?", type: "formula" },
     },
   },
   autresRecettes: {

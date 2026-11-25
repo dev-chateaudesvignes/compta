@@ -4,19 +4,17 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { exigerSession } from "@/lib/auth/session";
-import { listerAchats } from "@/lib/airtable/achat";
 import { listerAssolements } from "@/lib/airtable/assolement";
 import { listerAutresRecettes } from "@/lib/airtable/autresRecettes";
 import { campagnePourDate, listerCampagnes } from "@/lib/airtable/campagnes";
 import { listerCultures } from "@/lib/airtable/cultures";
-import { idsSignales, type AVerifier, type Lecture } from "@/lib/airtable/lecture";
+import type { AVerifier, Lecture } from "@/lib/airtable/lecture";
 import { listerLivraisons } from "@/lib/airtable/livraison";
 import { listerProduits } from "@/lib/airtable/produit";
-import { listerSyntheses } from "@/lib/airtable/synthese";
-import { listerTravaux } from "@/lib/airtable/travaux";
 import { listerVentes } from "@/lib/airtable/vente";
 import { dateParDefaut } from "@/lib/config";
 import { euros, nombre } from "@/lib/format";
+import { lireResultatCampagne } from "@/lib/resultatCampagne";
 
 export default function Controle(props: PageProps<"/controle">) {
   return (
@@ -44,37 +42,18 @@ async function Contenu({ searchParams }: { searchParams: PageProps<"/controle">[
   }
 
   const filtre = { campagne: campagne.id };
-  const [cultures, syntheses, assolements, livraisons, ventes, achats, recettes, travaux, produits] =
-    await Promise.all([
-      listerCultures(),
-      listerSyntheses(filtre),
-      listerAssolements(filtre),
-      listerLivraisons(filtre),
-      listerVentes(filtre),
-      listerAchats(filtre),
-      listerAutresRecettes(filtre),
-      listerTravaux(),
-      listerProduits(),
-    ]);
-
-  // Travaux n'a pas de lien Campagne : on garde ceux des lignes Synthèse de la campagne.
-  const idsSynthese = new Set(syntheses.valides.map((s) => s.id));
-  const valides = travaux.valides.filter((t) => idsSynthese.has(t.cultureRecolte));
-  const idsTravaux = new Set(valides.map((t) => t.id));
-  const travauxCampagne = {
-    valides,
-    aVerifier: travaux.aVerifier, // sans lien fiable, on ne sait pas les rattacher : toutes campagnes
-    signales: travaux.signales.filter((s) => idsTravaux.has(s.id)),
-  };
-  const travauxSignales = idsSignales(travauxCampagne);
-
-  // Une ligne Synthèse est « concernée » si un de ses Travaux est signalé (rollups de charges).
-  const syntheseSignalee = (travauxIds: string[]) => travauxIds.some((id) => travauxSignales.has(id));
-  const achatsSignales = idsSignales(achats);
+  const [resultat, cultures, assolements, livraisons, ventes, recettes, produits] = await Promise.all([
+    lireResultatCampagne(campagne),
+    listerCultures(),
+    listerAssolements(filtre),
+    listerLivraisons(filtre),
+    listerVentes(filtre),
+    listerAutresRecettes(filtre),
+    listerProduits(),
+  ]);
+  const { syntheses, achats, travauxCampagne, syntheseSignalee, resultatSignale, horsCultureSignale } = resultat;
 
   const nomCulture = new Map(cultures.valides.map((c) => [c.id, c.nomCulture]));
-  const resultatSignale = syntheses.valides.some((s) => syntheseSignalee(s.travaux));
-  const horsCultureSignale = achats.valides.some((a) => a.horsCultureEuros && achatsSignales.has(a.id));
 
   const lectures: [string, Lecture<unknown>][] = [
     ["Campagnes (toutes)", campagnes],
@@ -127,7 +106,7 @@ async function Contenu({ searchParams }: { searchParams: PageProps<"/controle">[
               <tr key={s.id} className="border-b">
                 <td className="py-2">
                   {nomCulture.get(s.culture) ?? s.idCultureAnnee}
-                  {syntheseSignalee(s.travaux) && <span className="ml-2 text-base text-amber-700">{ALERTE}</span>}
+                  {syntheseSignalee(s) && <span className="ml-2 text-base text-amber-700">{ALERTE}</span>}
                 </td>
                 <td className="text-right">{nombre(s.surfacePacHa)} ha</td>
                 <td className="text-right">{euros(s.ventesEuros)}</td>

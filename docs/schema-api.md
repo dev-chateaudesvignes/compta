@@ -49,6 +49,13 @@ Conséquences pour l'app :
 | Hors culture (€) | `fldsXsLjFyV6rTlUX` | rollup (Achat → Hors culture (€), SUM) | — (ajouté le 24/11) ; charges niveau exploitation (ex. bonus TSA) |
 | Résultat cultures (€) | `fldYowSXtxHjzyxCz` | rollup (Synthèse → Résultat (€), SUM) | — (ajouté le 24/11) |
 | Résultat exploitation (€) | `fldb5fssfrKmWY9Ud` | formule : Résultat cultures (€) − Hors culture (€) | — (ajouté le 24/11) ; chiffre mis en avant sur l'écran Résultat, lu tel quel (aucun calcul dans l'app) |
+| Total surface PAC (ha) | `fldtyjBvYGX6qo2in` | rollup (Synthèse → Surface PAC (ha), SUM) | — (ajouté le 25/11) ; ligne Total de l'écran Synthèse |
+| Total livré (t) | `flda1ZdG0mpdGQrZY` | rollup (Synthèse → Livraison en T, SUM) | — (25/11) |
+| Total ventes (€) | `fldTXgbpwUsZrKRp7` | rollup (Synthèse → Ventes (€), SUM) | — (25/11) |
+| Total autres recettes (€) | `fldWhsuy8UBfBFyTJ` | rollup (Synthèse → Autres recettes (€), SUM) | — (25/11) |
+| Total charges (€) | `fldrRmQeGISWWdTGc` | rollup (Synthèse → Charges (€), SUM) | — (25/11) |
+| Total travaux agricoles (€) | `fldWwmsLFaAedUE73` | rollup (Synthèse → Charges travaux agricoles (€), SUM) | — (25/11) |
+| Total travail du sol / récolte / travaux divers à répartir / autres travaux / clause gasoil (€) | `fldWX4vINTxbl6vn2` / `fldjcliKJ0Ey58QnW` / `flddCg6cQ6pgqKUxT` / `fldYWCjnXFO5ABS2k` / `flddMwCRqxGI6tcFm` | rollups (Synthèse → famille, SUM) | — (25/11) ; colonne Total du tableau « Travaux agricoles par culture » |
 
 Campagne = 01/07 → 30/06.
 
@@ -64,6 +71,7 @@ Campagne = 01/07 → 30/06.
 |---|---|---|---|
 | ID culture année | `fldAz5caYwDTrnq3W` | formule texte | Culture-Récolte, sert de clé aux automations de liaison |
 | Culture | `fldmztUZG0nrmDDTH` | lien | ✔ |
+| Nom culture | `fldx6onkyNIr7yfdU` | lookup Culture → Nom culture | — (25/11) ; nom affiché |
 | Campagne | `fldCOjkmgRZXvpUd9` | lien | ✔ |
 | Travaux | `fldYTa7EyEBFucwES` | lien → Travaux | ex-« Ventilation achat » |
 | Surface PAC (ha) | `fldxtkblc8rX9Kx71` | rollup | base des prorata |
@@ -82,6 +90,9 @@ Campagne = 01/07 → 30/06.
 | Charges travaux agricoles (€) | `fld6yp9bLsP4xYPeo` | rollup |  |
 | Charges diverses (€) | `fldwHFRt5JGYG49cj` | rollup |  |
 | Résultat (€) | `fldGq7DCC9mCwob9B` | formule | Ventes + Autres recettes − Charges |
+| Travail du sol / Récolte / Travaux divers à répartir / Autres travaux / Clause gasoil (€) | `fldJjRPqvRmRyBZyF` / `fldbj2ywtOGCpBWzk` / `fldStWQUpver99EGb` / `fldFDgs1mYGSltCCa` / `fldE0LEDdBjTwXoV2` | rollups (Travaux → Montant, filtrés sur la Catégorie) | — (25/11) ; tableau « Travaux agricoles par culture » |
+| Travaux non classés (€) | `fldvz6Hizgky4h6IL` | formule : Charges travaux agricoles − Σ familles, arrondi 2 déc. | — (25/11) ; ≠ 0 = une catégorie de travaux n'est dans aucune famille |
+| Alerte | `fld7jrymKy9GECw0E` | formule texte : « à vérifier » si Stock < 0 ou Travaux non classés ≠ 0 | — (25/11) ; affichée à côté du nom de la culture |
 
 Stock à une date donnée (historique) : pas stocké.
 
@@ -216,13 +227,10 @@ Lecture seule pour l'instant. Champs : voir base.
 
 ## Champs / objets legacy (ignorés par l'app, à supprimer à la main quand possible)
 
-Tri fait le 24/11/2026. Restent dans la base :
+Tri fait le 24/11/2026, complété le 25/11/2026 (colonnes par culture et champs « dernière vente » supprimés). Restent dans la base :
 
-- Cultures : Dernière vente.
-- Campagnes : Livraison <culture>, Vente <culture>, Vente Mais (colonnes codées en dur par culture, ne gèrent pas les nouvelles cultures).
-- Synthèse : Dernière date de vente, Dernière vente, Avant dernière vente.
-- Livraison : Tonnage <culture>, Tonnage sec corrigé.
-- Vente : Cumul des ventes prev, Cumul des ventes en quantité, Livraison à date, date dernière vente, Numéro avant dernière vente, Vente <culture>, is last sale ?.
+- Synthèse : Dernière date de vente.
+- Livraison : Tonnage, Tonnage sec corrigé.
 - Achat : Montant TTC.
 - Formulaire Form new livraison : remplacé par l'app → à supprimer.
 - Automations : seules restent les 3 « lien … synthèse » (voir plus haut).

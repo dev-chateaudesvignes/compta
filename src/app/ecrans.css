@@ -1,0 +1,86 @@
+/* Styles des écrans de consultation, repris de docs/mockups/Main.dc.html.
+   Tout est préfixé par .app pour ne pas toucher les autres pages (connexion, contrôle). */
+
+.app {
+  flex: 1;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #f6f4ee;
+  color: #1c2b22;
+  font-family: var(--font-atkinson), Arial, sans-serif;
+  font-size: 20px;
+  line-height: 1.4;
+}
+.app a { color: #2e6b3f; }
+.app a:hover { color: #1f4d2c; }
+
+/* Menu */
+.app .nav { flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 6px 20px; background: #1f5130; border-bottom: 5px solid #facc15; }
+.app .navlink { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-width: 112px; min-height: 60px; padding: 4px 14px; border-radius: 12px; text-decoration: none; color: #ffffff; font-size: 18px; font-weight: 700; box-sizing: border-box; }
+.app .navlink:hover { background: #2e6e45; color: #ffffff; }
+.app .navlink.on, .app .navlink.on:hover { background: #facc15; color: #1c2b22; }
+/* Écart à la maquette : écran pas encore construit → visible mais pas cliquable. */
+.app .navlink.off, .app .navlink.off:hover { background: none; color: #ffffff; opacity: 0.45; cursor: default; }
+.app .camp { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.app .camp label { font-size: 18px; color: #ffffff; font-weight: 700; }
+.app .camp select { font: inherit; font-size: 21px; font-weight: 700; padding: 8px 14px; min-height: 54px; border: 3px solid #facc15; border-radius: 10px; background: #ffffff; color: #1c2b22; }
+
+/* Mise en page */
+.app .wrap { flex: 1; min-height: 0; width: 100%; max-width: 1440px; margin: 0 auto; box-sizing: border-box; padding: 10px 24px 14px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; }
+.app .head { flex: none; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+.app h1 { margin: 0; font-size: 32px; line-height: 1.15; font-weight: 700; }
+.app h2 { margin: 0; font-size: 23px; line-height: 1.2; font-weight: 700; }
+.app .card { flex: none; min-height: 0; background: #ffffff; border: 2px solid #d5d9d2; border-radius: 16px; padding: 12px 18px 14px; display: flex; flex-direction: column; gap: 8px; box-sizing: border-box; }
+.app .cardhead { flex: none; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px; }
+.app .hint { flex: none; margin: 0; font-size: 17px; font-weight: 700; color: #5c4300; background: #fff1c9; border-radius: 8px; padding: 4px 12px; align-self: flex-start; }
+.app .empty { margin: 0; padding: 24px; text-align: center; background: #f6f4ee; border-radius: 12px; }
+
+/* Tableaux */
+.app table { border-collapse: collapse; width: 100%; font-size: 19px; }
+.app th { position: sticky; top: 0; z-index: 1; background: #ffffff; text-align: right; font-size: 16px; color: #4a5a50; font-weight: 700; padding: 4px 12px 6px; border-bottom: 2px solid #1c2b22; white-space: normal; vertical-align: bottom; line-height: 1.2; }
+.app td { text-align: right; padding: 4px 12px; border-bottom: 1px solid #e2e5df; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.app th:first-child, .app td:first-child { text-align: left; }
+.app td.name { font-weight: 700; white-space: normal; overflow-wrap: anywhere; }
+.app tr.total td { font-weight: 700; font-size: 21px; border: 0; background: #1f5130; color: #ffffff; }
+.app tr.total td.pos, .app tr.total td.neg { color: #ffffff; }
+.app th.tc { border-left: 3px solid #1c2b22; }
+.app td.tc { font-weight: 700; font-size: 21px; background: #f1f4ef; border-left: 3px solid #1c2b22; color: #1c2b22; }
+.app tr.total td.tc { background: #14391f; color: #facc15; }
+.app td.tc.neg { background: #fde2e2; color: #b91c1c; }
+.app td.tc.pos { background: #dcfce7; color: #15803d; }
+.app tr.total td.tc.pos, .app tr.total td.tc.neg { background: #14391f; color: #facc15; }
+/* Écart accepté le 24/11 : lignes « Hors culture » et « Résultat de l'exploitation » sous le Total. */
+.app tr.hors td { font-size: 19px; color: #3f4e45; border-bottom: 2px solid #1c2b22; }
+.app tr.exploitation td { font-weight: 700; font-size: 24px; border: 0; background: #14391f; color: #ffffff; }
+.app tr.exploitation td.tc, .app tr.exploitation td.tc.pos, .app tr.exploitation td.tc.neg { background: #0b2614; color: #facc15; font-size: 26px; }
+
+.app .neg { color: #a3231b; font-weight: 700; }
+.app .pos { color: #1f5a30; font-weight: 700; }
+.app .flag { display: inline-block; font-size: 15px; font-weight: 700; padding: 1px 9px; border-radius: 999px; background: #fff1c9; color: #5c4300; border: 1px solid #e0c46a; margin-left: 8px; vertical-align: 2px; }
+.app .sw { display: inline-block; width: 18px; height: 18px; border-radius: 5px; margin-right: 10px; vertical-align: -2px; flex: none; }
+.app th .sw { width: 14px; height: 14px; margin-right: 6px; }
+
+@media (max-height: 820px) {
+  .app { font-size: 18px; }
+  .app table { font-size: 17px; }
+  .app td { padding: 2px 10px; }
+  .app td.tc, .app tr.total td { font-size: 19px; }
+  .app h1 { font-size: 26px; }
+  .app h2 { font-size: 20px; }
+  .app .navlink { min-height: 52px; font-size: 16px; }
+  .app .wrap { padding: 10px 20px 12px; gap: 10px; }
+}
+@media (max-width: 1360px) {
+  .app table { font-size: 17px; }
+  .app td, .app th { padding-left: 8px; padding-right: 8px; }
+  .app th { font-size: 15px; }
+  .app td.tc, .app tr.total td { font-size: 19px; }
+  .app .navlink { min-width: 96px; }
+}
+@media (max-width: 900px) {
+  .app { height: auto; overflow: visible; }
+  .app .wrap { overflow: visible; }
+  .app .camp { margin-left: 0; }
+}
