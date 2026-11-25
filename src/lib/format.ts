@@ -33,6 +33,11 @@ export function nombre(v: number | null | undefined, decimales = 2): string {
   return v == null ? "—" : format(decimales).format(v);
 }
 
+/** Ratio → pourcentage : 0.9999 → « 100 % » ; vide → « — ». */
+export function pourcentage(ratio: number | null | undefined, decimales = 0): string {
+  return ratio == null ? "—" : format(decimales).format(ratio * 100) + "\u00A0%";
+}
+
 /** Vrai si la valeur s'affiche comme zéro (vide, 0 ou reste de flottant type 7e-15). */
 export function estNul(v: number | null | undefined, decimales = 2): boolean {
   return v == null || Math.abs(v) < 0.5 * 10 ** -decimales;

@@ -12,6 +12,7 @@ import { AucuneCampagne, campagneAffichee } from "../_ecran/campagne";
 import { Chargement } from "../_ecran/Chargement";
 import { couleurCulture, nomCulture, parOrdre } from "../_ecran/cultures";
 import { Menu } from "../_ecran/Menu";
+import { BoutonAjouter, Tuile } from "../_ecran/Tuile";
 
 export default function PageLivraisons(props: PageProps<"/livraisons">) {
   return (
@@ -22,11 +23,6 @@ export default function PageLivraisons(props: PageProps<"/livraisons">) {
 }
 
 const A_VERIFIER = "à vérifier";
-
-/** Fond de la tuile choisie : la couleur de la culture, très éclaircie. */
-function fondClair(couleur: string): string {
-  return `color-mix(in srgb, ${couleur} 15%, #FFFFFF)`;
-}
 
 function tonnes(v: number | null | undefined, decimales: number): string {
   return v == null ? "—" : `${nombre(v, decimales)} t`;
@@ -81,12 +77,7 @@ async function Contenu({ searchParams }: { searchParams: PageProps<"/livraisons"
       <main className="wrap">
         <div className="head">
           <h1>Livraisons</h1>
-          <button type="button" className="add" disabled title="Bientôt disponible">
-            <span aria-hidden="true" style={{ fontSize: 30, lineHeight: 1 }}>
-              +
-            </span>{" "}
-            Nouvelle livraison
-          </button>
+          <BoutonAjouter libelle="Nouvelle livraison" />
         </div>
 
         {nbProblemes > 0 && (
@@ -103,52 +94,18 @@ async function Contenu({ searchParams }: { searchParams: PageProps<"/livraisons"
             <section className="card" aria-labelledby="t-c">
               <h2 id="t-c">Par culture</h2>
               <div className="tiles" role="group" aria-label="Choisir la culture">
-                {tuiles.map((s) => {
-                  const on = s.id === choisie.id;
-                  const couleur = couleurCulture(s);
-                  const largeur = maxLivre > 0 ? ((s.livraisonEnT ?? 0) / maxLivre) * 100 : 0;
-                  return (
-                    <Link
-                      key={s.id}
-                      href={`/livraisons?campagne=${campagne.id}&culture=${s.id}`}
-                      className={`tile${on ? " on" : ""}`}
-                      style={on ? { borderColor: couleur, background: fondClair(couleur) } : undefined}
-                      aria-current={on ? "true" : undefined}
-                      scroll={false}
-                    >
-                      <span className="tt">
-                        <span className="tl1">
-                          <b>
-                            <span className="sw" style={{ background: couleur }} />
-                            {nomCulture(s)}
-                          </b>
-                          <span className="big">
-                            {s.stock != null && s.stock < 0 ? A_VERIFIER : tonnes(s.livraisonEnT ?? 0, 1)}
-                          </span>
-                        </span>
-                        <span className="tile-sub">{sousTitre(s)}</span>
-                        <span className="mbar" aria-hidden="true">
-                          <i style={{ width: `${largeur}%`, background: couleur }} />
-                        </span>
-                      </span>
-                      <span className="go">
-                        <svg
-                          width="26"
-                          height="26"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2.6"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          aria-hidden="true"
-                        >
-                          <path d="M5 12h14M13 6l6 6-6 6" />
-                        </svg>
-                      </span>
-                    </Link>
-                  );
-                })}
+                {tuiles.map((s) => (
+                  <Tuile
+                    key={s.id}
+                    href={`/livraisons?campagne=${campagne.id}&culture=${s.id}`}
+                    on={s.id === choisie.id}
+                    couleur={couleurCulture(s)}
+                    nom={nomCulture(s)}
+                    droite={s.alerte ?? tonnes(s.livraisonEnT ?? 0, 1)}
+                    sousTitre={sousTitre(s)}
+                    barre={maxLivre > 0 ? (s.livraisonEnT ?? 0) / maxLivre : 0}
+                  />
+                ))}
               </div>
             </section>
 

@@ -30,6 +30,8 @@ const lecture = definirLecture("synthese", {
   nombreDeLivraison: calculRequis,
   valeurLivreeEstimeeEuros: calcul, // rollup Livraison → Valeur estimée (€)
   venteEnT: calcul,
+  nombreDeVente: calculRequis,
+  partVendue: calcul, // ratio Vente en T ÷ Livraison en T (1 = 100 %) ; vide sans livraison
   stock: calcul, // t, négatif possible (vendu plus que livré)
   rendementEnTHa: calcul, // vide si pas de livraison
   prixMoyenDeVenteEnEurosT: calcul, // vide si pas de vente

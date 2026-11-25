@@ -50,7 +50,7 @@ const ENTREES: Entree[] = [
   {
     cle: "ventes",
     libelle: "Ventes",
-    href: null,
+    href: "/ventes",
     icone: (
       <svg {...ICONE}>
         <circle cx="11" cy="15" r="7.5" />

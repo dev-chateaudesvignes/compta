@@ -111,6 +111,7 @@ export const tables = {
       ordre: { id: "fldrfIbvJtZayK3r6", nom: "Ordre", type: "multipleLookupValues" },
       seLivre: { id: "fld2f1RcLT1qLUYxr", nom: "Se livre", type: "multipleLookupValues" },
       valeurLivreeEstimeeEuros: { id: "fldh2LUEzi1dXIkYk", nom: "Valeur livrée estimée (€)", type: "rollup" },
+      partVendue: { id: "fld800eu8FJQGSHgp", nom: "Part vendue (%)", type: "formula" },
     },
   },
   champs: {
