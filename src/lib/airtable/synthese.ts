@@ -1,6 +1,17 @@
 import "server-only";
 import { definirLecture, type ValeurDe } from "./lecture";
-import { calcul, calculRequis, lienUnique, liens, lookupTexte, nombre, texte, texteRequis } from "./zod";
+import {
+  calcul,
+  calculRequis,
+  lienUnique,
+  liens,
+  lookupCase,
+  lookupNombre,
+  lookupTexte,
+  nombre,
+  texte,
+  texteRequis,
+} from "./zod";
 
 // Synthèse : une ligne par culture × récolte. LECTURE SEULE : tout ce qui est
 // ici est calculé par Airtable (rollups / formules) ; l'app ne recalcule rien.
@@ -9,10 +20,15 @@ const lecture = definirLecture("synthese", {
   idCultureAnnee: texteRequis, // « Blé-2025 », clé des automations de liaison
   culture: lienUnique,
   nomCulture: lookupTexte, // lookup Culture → Nom culture
+  couleur: lookupTexte, // lookup Culture → Couleur (« #C2410C »)
+  ordre: lookupNombre, // lookup Culture → Ordre d'affichage
+  seLivre: lookupCase, // lookup Culture → Se livre (absente de l'écran Livraisons sinon)
   campagne: lienUnique,
   travaux: liens,
   surfacePacHa: calculRequis,
   livraisonEnT: calcul,
+  nombreDeLivraison: calculRequis,
+  valeurLivreeEstimeeEuros: calcul, // rollup Livraison → Valeur estimée (€)
   venteEnT: calcul,
   stock: calcul, // t, négatif possible (vendu plus que livré)
   rendementEnTHa: calcul, // vide si pas de livraison

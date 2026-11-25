@@ -64,6 +64,9 @@ Campagne = 01/07 → 30/06.
 | Champ | ID | Type | Obligatoire |
 |---|---|---|---|
 | Nom culture | `fld3yEvGEYYCPoH6k` | text | ✔ |
+| Couleur | `fldMphyj8LkYiko0l` | text « #RRGGBB » | — (25/11) ; couleur de la culture sur les écrans (gris si vide ou mal écrite) |
+| Ordre | `fldEyOzSMav4w62i2` | number | — (25/11) ; ordre d'affichage (vide : à la fin) |
+| Se livre | `fld73PsJ8tD5WTEFp` | checkbox | — (25/11) ; non coché (ex. Jachère) : absente de l'écran Livraisons |
 
 ### Synthèse (culture × récolte) `tblEVz7qwJpWsuP29` — lecture seule
 
@@ -72,10 +75,13 @@ Campagne = 01/07 → 30/06.
 | ID culture année | `fldAz5caYwDTrnq3W` | formule texte | Culture-Récolte, sert de clé aux automations de liaison |
 | Culture | `fldmztUZG0nrmDDTH` | lien | ✔ |
 | Nom culture | `fldx6onkyNIr7yfdU` | lookup Culture → Nom culture | — (25/11) ; nom affiché |
+| Couleur / Ordre / Se livre | `fldpRyBbEanq4tp7d` / `fldrfIbvJtZayK3r6` / `fld2f1RcLT1qLUYxr` | lookups Culture → … | — (25/11) ; « Se livre » non coché renvoie `[null]` |
 | Campagne | `fldCOjkmgRZXvpUd9` | lien | ✔ |
 | Travaux | `fldYTa7EyEBFucwES` | lien → Travaux | ex-« Ventilation achat » |
 | Surface PAC (ha) | `fldxtkblc8rX9Kx71` | rollup | base des prorata |
 | Livraison en T | `fldqol4POHF9d6tJ1` | formule |  |
+| Nombre de livraison | `fldtf2PCSFMYFHpjY` | count | écran Livraisons |
+| Valeur livrée estimée (€) | `fldh2LUEzi1dXIkYk` | rollup (Livraison → Valeur estimée (€), SUM) | — (25/11) ; écran Livraisons |
 | Vente en T | `fldDYRBDIkl6064Zj` | rollup |  |
 | Stock | `fldxC99x8pdbfuGRc` | formule | négatif possible (maïs 2025 sans BL) |
 | Rendement en T/Ha | `fld8gjkGcYNtS77pJ` | formule | vide si pas de livraison |
@@ -184,6 +190,9 @@ Ces deux rollups valent 0 pour un produit sans achat sur la campagne « En cours
 | Synthèse | `fld3cDLSgNLkLFQkv` | lien | rempli par automation (ne pas écrire) |
 | Date de livraison | `fldv7sAimW2XGyNiO` | date | ✔ |
 | Poids net | `fldmbR5bJCu2OeUPQ` | number (kg) | ✔ (base de Synthèse.Livraison en T ; Tonnage n'est pas utilisé) |
+| Poids net (t) | `fldaia0hymn7S1IVl` | formule : Poids net / 1000, arrondi 3 déc. | — (25/11) |
+| Prix moyen (€/t) | `fldJ9vucSEIEGF5eF` | rollup (Synthèse → Prix moyen de vente en €/T) | — (25/11) ; non lu par l'app (sert à Valeur estimée) |
+| Valeur estimée (€) | `fldTiCDycisJBQmxj` | formule : Poids net (t) × Prix moyen (€/t), arrondi 2 déc. | — (25/11) ; vide tant que la culture n'a pas de vente |
 | Tonnage, H2O, PS, Calibre, Impureté, Proteine, … | (voir base) | number | non |
 | Champ / Assolement | `fld6EiQHRQII21x1C` / `fld7VnjSuluC77ICK` | lien | non |
 

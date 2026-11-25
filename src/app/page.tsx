@@ -6,12 +6,12 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { exigerSession } from "@/lib/auth/session";
-import { campagnePourDate, listerCampagnes, type Campagne } from "@/lib/airtable/campagnes";
 import type { Synthese } from "@/lib/airtable/synthese";
-import { dateParDefaut } from "@/lib/config";
 import { euros, eurosSigne, estNul, nombre } from "@/lib/format";
 import { lireResultatCampagne } from "@/lib/resultatCampagne";
+import { AucuneCampagne, campagneAffichee, libelleCampagne } from "./_ecran/campagne";
 import { Chargement } from "./_ecran/Chargement";
+import { couleurCulture, nomCulture as nom, parOrdre } from "./_ecran/cultures";
 import { Menu } from "./_ecran/Menu";
 
 export default function PageSynthese(props: PageProps<"/">) {
@@ -23,27 +23,6 @@ export default function PageSynthese(props: PageProps<"/">) {
 }
 
 const A_VERIFIER = "à vérifier";
-
-// Couleur de chaque culture (maquette). Une culture absente de la liste prend une
-// couleur de réserve, dans l'ordre d'affichage.
-const COULEURS: Record<string, string> = {
-  ble: "#C2410C",
-  "orge hiver": "#2563EB",
-  "orge d'hiver": "#2563EB",
-  colza: "#CA8A04",
-  mais: "#A21CAF",
-  jachere: "#6B7280",
-};
-const COULEURS_RESERVE = ["#0E7490", "#4D7C0F", "#BE185D", "#475569", "#9A3412", "#1D4ED8"];
-
-function sansAccent(texte: string): string {
-  return texte.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase().trim();
-}
-
-/** « Campagne 2024/2025 » → « 2024 / 2025 ». */
-function libelleCampagne(c: Campagne): string {
-  return c.name.replace(/^campagne\s+/i, "").replace(/\s*\/\s*/, " / ");
-}
 
 /** Montant arrondi à l'euro ; zéro → « — » (comme la maquette). */
 function eurosOuTiret(v: number | null | undefined): string {
@@ -58,42 +37,16 @@ async function Contenu({ searchParams }: { searchParams: PageProps<"/">["searchP
   await exigerSession();
   const { campagne: demandee } = await searchParams;
 
-  const campagnes = await listerCampagnes();
-  const parDefaut = campagnePourDate(campagnes.valides, dateParDefaut());
-  const campagne = campagnes.valides.find((c) => c.id === demandee) ?? parDefaut;
-
-  if (!campagne) {
-    return (
-      <div className="app">
-        <main className="wrap">
-          <p className="empty">
-            Aucune campagne ne correspond à la date du {dateParDefaut().split("-").reverse().join("/")}. Il faut
-            la créer dans Airtable.
-          </p>
-        </main>
-      </div>
-    );
-  }
-
-  // Liste du menu : les campagnes qui ont des cultures, la campagne en cours, et celle affichée.
-  const choix = campagnes.valides
-    .filter((c) => c.totalSurfacePacHa > 0 || c.status === "En cours" || c.id === campagne.id)
-    .sort((a, b) => a.anneeDeRecolte - b.anneeDeRecolte)
-    .map((c) => ({ id: c.id, libelle: libelleCampagne(c) }));
+  const affichee = await campagneAffichee(demandee);
+  if (!affichee) return <AucuneCampagne />;
+  const { campagne, choix } = affichee;
 
   const { syntheses, achats, travauxCampagne, syntheseSignalee, resultatSignale, horsCultureSignale } =
     await lireResultatCampagne(campagne);
 
-  // Ordre d'affichage : la plus grande surface d'abord (comme la maquette).
-  const lignes = [...syntheses.valides].sort((a, b) => b.surfacePacHa - a.surfacePacHa);
-  const couleur = new Map<string, string>();
-  let reserve = 0;
-  for (const s of lignes) {
-    const c = COULEURS[sansAccent(s.nomCulture ?? "")];
-    couleur.set(s.id, c ?? COULEURS_RESERVE[reserve++ % COULEURS_RESERVE.length]);
-  }
+  // Ordre et couleurs : ceux de la table Cultures.
+  const lignes = [...syntheses.valides].sort(parOrdre);
 
-  const nom = (s: Synthese) => s.nomCulture ?? s.idCultureAnnee;
   const aVerifier = (s: Synthese) => !!s.alerte || syntheseSignalee(s);
 
   // Lignes mises de côté (invalides, donc absentes du tableau) ou valeurs inattendues.
@@ -159,7 +112,7 @@ async function Contenu({ searchParams }: { searchParams: PageProps<"/">["searchP
                 {lignes.map((s) => (
                   <tr key={s.id}>
                     <td className="name">
-                      <span className="sw" style={{ background: couleur.get(s.id) }} />
+                      <span className="sw" style={{ background: couleurCulture(s) }} />
                       {nom(s)}
                       {aVerifier(s) && <span className="flag">{s.alerte ?? A_VERIFIER}</span>}
                     </td>
@@ -217,7 +170,7 @@ async function Contenu({ searchParams }: { searchParams: PageProps<"/">["searchP
                   <th scope="col">Famille de travaux</th>
                   {lignes.map((s) => (
                     <th key={s.id} scope="col">
-                      <span className="sw" style={{ background: couleur.get(s.id) }} />
+                      <span className="sw" style={{ background: couleurCulture(s) }} />
                       {nom(s)}
                     </th>
                   ))}

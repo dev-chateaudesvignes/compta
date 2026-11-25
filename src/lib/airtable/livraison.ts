@@ -2,6 +2,8 @@ import "server-only";
 import { definirEcriture } from "./ecriture";
 import { definirLecture, type ValeurDe } from "./lecture";
 import {
+  calcul,
+  calculRequis,
   date,
   dateAEcrire,
   lienAEcrire,
@@ -26,6 +28,8 @@ const lecture = definirLecture("livraison", {
   synthese: liens,
   dateDeLivraison: date,
   poidsNet: nombreRequis, // kg
+  poidsNetT: calculRequis, // formule : Poids net / 1000
+  valeurEstimeeEuros: calcul, // formule : Poids net (t) × prix moyen de vente de la culture ; vide sans vente
   tonnage: nombre,
   champ: liens,
   assolement: liens,

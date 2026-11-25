@@ -36,7 +36,7 @@ const ENTREES: Entree[] = [
   {
     cle: "livraisons",
     libelle: "Livraisons",
-    href: null,
+    href: "/livraisons",
     icone: (
       <svg {...ICONE}>
         <path d="M2.5 8.5h18v8h-18z" />

@@ -101,6 +101,12 @@ const lookupUnTexte = () =>
 /** Lookup texte / choix (tableau de 0 ou 1 valeur) → le texte, ou undefined. */
 export const lookupTexte = lookupUnTexte();
 
+/** Lookup d'une case à cocher → vrai si cochée. Non cochée : absent, [] ou [null] selon Airtable. */
+export const lookupCase = z
+  .array(z.boolean().nullable())
+  .optional()
+  .transform((v) => v?.[0] === true);
+
 /** Lookup d'un choix parmi une liste connue (valeur hors liste : signalée). */
 export const lookupChoixParmi = (valeurs: readonly string[]) => connu(lookupUnTexte(), valeurs);
 

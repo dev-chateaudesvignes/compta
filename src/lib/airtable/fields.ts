@@ -30,6 +30,9 @@ export const tables = {
       livraison: { id: "fldvaE60lt4xeiLdP", nom: "Livraison", type: "multipleRecordLinks" },
       vente: { id: "fldFuUywbfomdftTB", nom: "Vente", type: "multipleRecordLinks" },
       synthese: { id: "fldlI8SSNaLTJtOXC", nom: "Synthèse", type: "multipleRecordLinks" },
+      couleur: { id: "fldMphyj8LkYiko0l", nom: "Couleur", type: "singleLineText" },
+      ordre: { id: "fldEyOzSMav4w62i2", nom: "Ordre", type: "number" },
+      seLivre: { id: "fld73PsJ8tD5WTEFp", nom: "Se livre", type: "checkbox" },
     },
   },
   campagnes: {
@@ -104,6 +107,10 @@ export const tables = {
       travaux: { id: "fldYTa7EyEBFucwES", nom: "Travaux", type: "multipleRecordLinks" },
       autresRecettes: { id: "fldO20zOOmdzM9FLf", nom: "Autres recettes", type: "multipleRecordLinks" },
       nomCulture: { id: "fldx6onkyNIr7yfdU", nom: "Nom culture", type: "multipleLookupValues" },
+      couleur: { id: "fldpRyBbEanq4tp7d", nom: "Couleur", type: "multipleLookupValues" },
+      ordre: { id: "fldrfIbvJtZayK3r6", nom: "Ordre", type: "multipleLookupValues" },
+      seLivre: { id: "fld2f1RcLT1qLUYxr", nom: "Se livre", type: "multipleLookupValues" },
+      valeurLivreeEstimeeEuros: { id: "fldh2LUEzi1dXIkYk", nom: "Valeur livrée estimée (€)", type: "rollup" },
     },
   },
   champs: {
@@ -163,6 +170,9 @@ export const tables = {
       vente: { id: "fldB21kidBtTrzj2R", nom: "Vente", type: "multipleRecordLinks" },
       anneeDeRecolte: { id: "fldu4cOm3MpvQwRCj", nom: "Année de récolte", type: "multipleLookupValues" },
       synthese: { id: "fld3cDLSgNLkLFQkv", nom: "Synthèse", type: "multipleRecordLinks" },
+      poidsNetT: { id: "fldaia0hymn7S1IVl", nom: "Poids net (t)", type: "formula" },
+      prixMoyenEurosT: { id: "fldJ9vucSEIEGF5eF", nom: "Prix moyen (€/t)", type: "rollup" },
+      valeurEstimeeEuros: { id: "fldTiCDycisJBQmxj", nom: "Valeur estimée (€)", type: "formula" },
     },
   },
   vente: {
